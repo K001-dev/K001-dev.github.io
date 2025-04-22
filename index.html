@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用级AI - AI开发者</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6b46c1 0%, #3b82f6 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-indigo-600">应用级AI</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-700 hover:text-indigo-600 transition">关于我</a>
+                    <a href="#projects" class="text-gray-700 hover:text-indigo-600 transition">项目</a>
+                    <a href="#contact" class="text-gray-700 hover:text-indigo-600 transition">联系</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white pb-4 px-4 shadow-md">
+            <a href="#about" class="block py-2 text-gray-700 hover:text-indigo-600 transition">关于我</a>
+            <a href="#projects" class="block py-2 text-gray-700 hover:text-indigo-600 transition">项目</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-indigo-600 transition">联系</a>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <header class="gradient-bg text-white py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">AI大模型开发者</h1>
+                <p class="text-xl mb-6 opacity-90">专注于Agent开发与Prompt工程</p>
+                <div class="flex space-x-4">
+                    <a href="#contact" class="bg-white text-indigo-600 px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition">联系我</a>
+                    <a href="#projects" class="border border-white text-white px-6 py-2 rounded-full font-medium hover:bg-white hover:text-indigo-600 transition">查看项目</a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                    <img src="https://picsum.photos/800/800?random=1" alt="个人头像" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 关于我 -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">关于我</h2>
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <img src="https://picsum.photos/600/400?random=2" alt="关于我" class="rounded-lg shadow-lg w-full">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-semibold mb-4">AI大模型使用者，Agent开发者，prompt工程师</h3>
+                    <p class="text-gray-600 mb-6">
+                        我专注于人工智能领域，特别是大型语言模型的应用开发。作为Agent开发者和Prompt工程师，我致力于创建智能、高效的AI解决方案，帮助企业和个人提升生产力。
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-robot text-indigo-500 text-2xl mb-2"></i>
+                            <h4 class="font-medium">Agent开发</h4>
+                            <p class="text-sm text-gray-500">构建智能代理系统</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-keyboard text-indigo-500 text-2xl mb-2"></i>
+                            <h4 class="font-medium">Prompt工程</h4>
+                            <p class="text-sm text-gray-500">优化AI交互体验</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-brain text-indigo-500 text-2xl mb-2"></i>
+                            <h4 class="font-medium">大模型应用</h4>
+                            <p class="text-sm text-gray-500">LLM实际场景落地</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-chart-line text-indigo-500 text-2xl mb-2"></i>
+                            <h4 class="font-medium">AI解决方案</h4>
+                            <p class="text-sm text-gray-500">提升业务效率</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目展示 -->
+    <section id="projects" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">我的项目</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 项目1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover transition duration-300">
+                    <img src="https://picsum.photos/600/400?random=3" alt="项目1" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">智能客服Agent</h3>
+                        <p class="text-gray-600 mb-4">基于大模型的智能客服系统，能够理解复杂问题并提供准确回答。</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">LLM</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Agent</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">NLP</span>
+                        </div>
+                        <a href="#" class="text-indigo-600 font-medium hover:underline">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <!-- 项目2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover transition duration-300">
+                    <img src="https://picsum.photos/600/400?random=4" alt="项目2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Prompt优化工具</h3>
+                        <p class="text-gray-600 mb-4">帮助用户快速生成和优化Prompt，提高与大模型交互的效率和质量。</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Prompt工程</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">AI工具</span>
+                        </div>
+                        <a href="#" class="text-indigo-600 font-medium hover:underline">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <!-- 项目3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover transition duration-300">
+                    <img src="https://picsum.photos/600/400?random=5" alt="项目3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">多Agent协作系统</h3>
+                        <p class="text-gray-600 mb-4">实现多个AI Agent的协作，完成复杂任务，如数据分析、内容生成等。</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Multi-Agent</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">自动化</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">LLM</span>
+                        </div>
+                        <a href="#" class="text-indigo-600 font-medium hover:underline">查看详情 →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block border border-indigo-600 text-indigo-600 px-6 py-2 rounded-full font-medium hover:bg-indigo-600 hover:text-white transition">查看更多项目</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我 -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">联系我</h2>
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <div class="bg-gray-50 p-8 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4">联系方式</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-qrcode text-indigo-500 text-xl mt-1 mr-4"></i>
+                                <div>
+                                    <h4 class="font-medium">公众号</h4>
+                                    <p class="text-gray-600">应用级AI</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fab fa-weixin text-indigo-500 text-xl mt-1 mr-4"></i>
+                                <div>
+                                    <h4 class="font-medium">微信</h4>
+                                    <p class="text-gray-600">wxid_xer4owzguc3b22</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mt-8 mb-4">关注我</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="social-icon text-gray-600 hover:text-indigo-500">
+                                <i class="fab fa-github text-2xl"></i>
+                            </a>
+                            <a href="#" class="social-icon text-gray-600 hover:text-indigo-500">
+                                <i class="fab fa-linkedin text-2xl"></i>
+                            </a>
+                            <a href="#" class="social-icon text-gray-600 hover:text-indigo-500">
+                                <i class="fab fa-twitter text-2xl"></i>
+                            </a>
+                            <a href="#" class="social-icon text-gray-600 hover:text-indigo-500">
+                                <i class="fab fa-medium text-2xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <form class="bg-gray-50 p-8 rounded-lg">
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 mb-2">姓名</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 mb-2">邮箱</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-gray-700 mb-2">留言</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <span class="text-xl font-bold">应用级AI</span>
+                    <p class="text-gray-400 mt-2">AI大模型使用者，Agent开发者，prompt工程师</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-medium text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2023 应用级AI. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // 返回顶部按钮
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // 如果是移动端菜单，点击后关闭菜单
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
