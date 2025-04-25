@@ -20,7 +20,7 @@
             padding: 0;
             overflow: hidden; /* 隐藏滚动条，让聊天组件自己处理滚动 */
             font-family: 'Inter', sans-serif; /* 使用相同的字体 */
-            background-color: #f0f2f5; /* 设置一个更接近图一的非常浅的灰色背景 */
+            background-color: #f0f2f5; /* 设置一个非常浅的灰色背景 */
             color: #333; /* 设置默认文本颜色 */
             display: flex; /* 使用 flex 布局来居中内容 */
             justify-content: center; /* 水平居中 */
@@ -30,106 +30,146 @@
 
         /* 外部容器，用于限制聊天窗口的尺寸并添加阴影 */
         #chat-wrapper {
-            width: 100%;
+            width: 95%; /* 稍大一点，或者保持100%和max-width */
             max-width: 800px; /* 设置一个最大宽度，你可以根据需要调整 */
-            height: 85%; /* 设置一个高度，或者使用 max-height 和 min-height */
+            height: 90%; /* 设置一个高度，或者使用 max-height */
             background-color: #ffffff; /* 设置主聊天区域的白色背景 */
             border-radius: 15px; /* 设置外层圆角 */
             overflow: hidden; /* 隐藏超出容器的滚动条等 */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 添加一个阴影 */
-            display: flex; /* 使其成为 flex 容器，用于内部布局（虽然 n8n chat fullscreen 会填满它）*/
-            flex-direction: column; /* 内容垂直排列 */
+            display: flex; /* 使其成为 flex 容器 */
+            flex-direction: column; /* 子元素垂直排列 */
+            box-sizing: border-box; /* 确保 padding 不会增加总尺寸 */
+            padding: 20px; /* 给外层 wrapper 添加一些内边距 */
         }
 
+        /* 自定义标题样式 */
+        .custom-header {
+            text-align: center; /* 文本居中 */
+            font-size: 2em; /* 较大的字号 */
+            font-weight: 600; /* 加粗 */
+            color: #333; /* 文字颜色 */
+            margin-bottom: 20px; /* 标题下方留白 */
+            padding: 0 10px; /* 左右稍微有点内边距 */
+        }
 
         /* 这是聊天界面将被嵌入的容器 */
         /* n8n chat 的 fullscreen 模式会填满它的 target 容器 */
         #my-chat-container {
             width: 100%;
-            height: 100%; /* 填满父容器 */
-            /* mode: 'fullscreen' 会让 chat 组件填满这个容器 */
-             position: relative; /* 可能需要相对定位 */
+            flex-grow: 1; /* 让它占据 flex 容器的剩余空间 */
+            position: relative; /* 可能需要相对定位 */
+             /* background-color: #f9f9f9; /* 可以给消息区域设置一个微浅的背景色 */
         }
 
         /* 覆盖 n8n chat 内部元素的 CSS 变量来改变外观 */
-        /* 将变量定义在 #my-chat-container 下，确保只影响聊天组件内部 */
+        /* 将变量定义在 #my-chat-container 下 */
        #my-chat-container {
-            /* 头部样式 - 图一没有明显的固定头部，我们主要依赖 initialMessages */
-            /* 为了确保不显示默认头部，可以尝试将头部高度设为0或隐藏 */
+            /* 头部样式 - 我们使用自定义头部，所以隐藏组件自带的头部 */
             --chat--header-height: 0px;
             --chat--header--padding: 0;
-            /* 如果需要，可以设置一个背景色，但图一头部区域和消息区域背景一致 */
-            /* --chat--header--background: transparent; */
-            /* --chat--header--color: transparent; */ /* 隐藏文字 */
             --chat--header--border-bottom: none;
 
-
-            /* 消息气泡样式 - 调整以匹配图一中的简约气泡 */
+            /* 消息气泡样式 */
             --chat--message--bot--background: #ffffff; /* 机器人消息背景色 (白色) */
             --chat--message--bot--color: #333; /* 机器人消息文字颜色 */
-            --chat--message--user--background: #e9ecef; /* 用户消息背景色 (浅灰，比 body 背景稍深) */
+            --chat--message--user--background: #e9ecef; /* 用户消息背景色 (浅灰) */
             --chat--message--user--color: #333; /* 用户消息文字颜色 */
-            --chat--border-radius: 12px; /* 增加消息气泡圆角，匹配图一 */
+            --chat--border-radius: 12px; /* 增加消息气泡圆角 */
             --chat--message--padding: 0.8rem 1.2rem; /* 消息内边距 */
             --chat--message-line-height: 1.6; /* 行高 */
-            --chat--spacing: 1rem; /* 基本间距，影响消息之间的距离、输入区域与消息区域的距离等 */
+            --chat--spacing: 1rem; /* 基本间距 */
 
 
-            /* 输入框样式 - 调整以匹配图一中的大的白色圆角输入区域 */
-            /* 注意：内部布局（Web Search 按钮等）无法通过这些变量实现 */
-
+            /* 输入框样式 */
             /* 输入区域整体样式 (包含输入框和发送按钮的区域) */
-            --chat--input-area-background: #ffffff; /* 输入区域背景色 (白色，与主体背景一致) */
+            --chat--input-area-background: #ffffff; /* 输入区域背景色 (白色) */
             --chat--input-area-padding: 1rem 1.5rem; /* 增加输入区域上下内边距 */
-            --chat--input-area-border-top: none; /* 移除输入区域上边框，更简约 */
-            --chat--input-area-box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* 给输入区域上方加一个细微阴影 */
+            --chat--input-area-border-top: none; /* 移除输入区域上边框 */
+            --chat--input-area-box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03); /* 添加更柔和的阴影 */
 
 
-            /* 输入框本身的样式 (通常 n8n chat 的输入框会是一个 textarea 或 input) */
-            /* 我们将输入框本身设置为透明背景，让其看起来是位于输入区域背景之上 */
+            /* 输入框本身的样式 */
             --chat--input-background: transparent; /* 输入框背景透明 */
             --chat--input-color: #333; /* 输入框文字颜色 */
-            --chat--input-padding: 0; /* 输入框本身的内边距设为0，让父容器控制 */
-            --chat--input-border-radius: 0; /* 输入框本身不需要圆角，父容器已处理 */
+            --chat--input-padding: 0; /* 输入框本身的内边距设为0 */
+            --chat--input-border-radius: 0; /* 输入框本身不需要圆角 */
             --chat--input-border: none; /* 移除边框 */
             --chat--input-box-shadow: none; /* 移除阴影 */
             --chat--textarea--height: 50px; /* 输入框高度 */
 
 
-             /* 发送按钮样式 (如果存在，通常在输入框旁边) */
-             /* 需要检查 n8n chat 的 DOM 结构找到发送按钮的类名来定位和修改 */
-             /* 文档中的 --chat--toggle-- 变量可能控制的是窗口模式下的悬浮按钮，而不是输入区域内的发送按钮 */
-             /* 如果发送按钮有特定的类，比如 .chat-send-button，则需要写自定义 CSS */
-             /* 假设发送按钮是 input area 的一部分，我们只能通过变量调整其默认样式 */
-             /* 这里的 --chat--toggle-- 变量可能不适用，需要根据实际组件DOM来写CSS */
-             /* 例如: .n8n-chat-input-area button { background-color: #007bff; color: white; border-radius: 50%; width: 40px; height: 40px; } */
+             /* 发送按钮样式 (需要检查实际类名来定位) */
+             /* 例如，如果发送按钮的类是 .n8n-chat-send-button */
+             /* 您可能需要根据实际 DOM 结构来调整 */
+             /* .n8n-chat-input-area button { ... } */
 
-            /* 其他颜色和变量，根据需要调整 */
-            --chat--color-primary: #007bff; /* 蓝色，可用于发送按钮或链接 */
+
+            /* 其他颜色和变量 */
+            --chat--color-primary: #007bff; /* 蓝色 */
             --chat--color-secondary: #6c757d; /* 灰色 */
             --chat--color-white: #ffffff; /* 白色 */
-             --chat--color-light: #e9ecef; /* 浅色，用于用户消息背景等 */
+            --chat--color-light: #e9ecef; /* 浅色 */
             --chat--color-medium: #adb5bd; /* 中间色 */
-            --chat--color-dark: #333; /* 深色，用于文本 */
+            --chat--color-dark: #333; /* 深色 */
             --chat--color-typing: #555; /* 输入中提示颜色 */
 
-
-             /* 可能需要一些自定义 CSS 来调整布局 */
-             /* 检查实际 DOM，找到消息列表容器和输入区域容器的类名 */
-             /* 例如： */
-             /* .n8n-chat-messages-container { overflow-y: auto; padding: var(--chat--spacing); flex-grow: 1; } */
-             /* .n8n-chat-input-area { display: flex; align-items: center; } */
-             /* .n8n-chat-input-area input, .n8n-chat-input-area textarea { flex-grow: 1; margin-right: 10px; } */
-              /* 上面的自定义CSS需要根据n8n实际生成的DOM结构来编写 */
-
        }
-        /* Custom CSS to hide potential default header elements if variables aren't enough */
-        /* This is a guess based on common chat widget structures */
-        #my-chat-container .chat-header,
-        #my-chat-container .n8n-chat-header { /* Use actual class names if known */
-             display: none !important;
+
+        /* === 自定义 CSS 规则来修正对齐和内边距 === */
+        /* 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
+        /* 以下类名为常见或可能的类名，您可能需要根据浏览器开发者工具检查来调整 */
+
+        /* 隐藏可能存在的默认头部元素 */
+        /* .n8n-chat-header-container, .chat-header { display: none !important; } /* 假设的类名 */
+
+        /* 调整消息列表容器的内边距，确保消息不会贴边 */
+        /* 假设消息列表容器的类名是 .n8n-chat-messages 或 .chat-messages-list */
+        #my-chat-container .n8n-chat-messages { /* 或者其他实际的类名 */
+             padding: 10px; /* 添加内边距，避免消息贴左或贴右，也给顶部和底部留白 */
+             overflow-y: auto; /* 确保消息列表可滚动 */
+             flex-grow: 1; /* 在 flex 布局中占据剩余空间 */
+             display: flex; /* 使消息容器成为 flex 容器 */
+             flex-direction: column; /* 消息垂直排列 */
         }
 
+        /* 修正用户消息靠右对齐 */
+        /* 假设单个消息容器的类名是 .n8n-chat-message */
+        /* 用户消息的特定类名是 .n8n-chat-message--user 或 .user */
+        #my-chat-container .n8n-chat-message--user { /* 或者其他实际的类名 */
+             margin-left: auto; /* 自动左外边距，将元素推到最右边 */
+             margin-right: 0; /* 确保右外边距为0 */
+             /* display: flex; /* 如果消息内容本身需要 flex 布局，可能需要 */
+             /* justify-content: flex-end; /* 如果消息内容本身是 flex item，可能需要 */
+        }
+
+        /* 修正机器人消息靠左对齐 (确保默认行为正确) */
+        #my-chat-container .n8n-chat-message--bot { /* 或者其他实际的类名 */
+             margin-right: auto; /* 自动右外边距 */
+             margin-left: 0; /* 确保左外边距为0 */
+             /* display: flex; */
+             /* justify-content: flex-start; */
+        }
+
+        /* 可选：调整单个消息气泡的最大宽度 */
+         #my-chat-container .n8n-chat-message { /* 或者其他实际的类名 */
+             max-width: 85%; /* 限制消息气泡宽度 */
+             margin-bottom: 10px; /* 消息之间留白 */
+         }
+
+          /* 调整输入区域的布局，可能需要检查实际DOM */
+          /* 假设输入区域类名为 .n8n-chat-input-area */
+          /* #my-chat-container .n8n-chat-input-area {
+               display: flex;
+               align-items: center;
+               gap: 10px; /* 输入框和发送按钮之间的间距 */
+           }
+           /* #my-chat-container .n8n-chat-input-area .n8n-chat-input { /* 假设输入框类名 */
+               flex-grow: 1; /* 输入框占据剩余空间 */
+           }
+           /* #my-chat-container .n8n-chat-input-area .n8n-chat-send-button { /* 假设发送按钮类名 */
+                /* 设置按钮样式 */
+           } */
 
     </style>
 </head>
@@ -137,8 +177,13 @@
 
     <!-- 外部容器，用于居中和设置尺寸 -->
     <div id="chat-wrapper">
+        <!-- 自定义标题 -->
+        <div class="custom-header">
+            Hi, doumn jack
+        </div>
+
         <!-- 这是聊天界面将被嵌入的容器 -->
-        <!-- 由于是全屏模式，这个容器填满整个父容器即可 -->
+        <!-- 由于是全屏模式，这个容器填满 flex 容器的剩余空间 -->
         <div id="my-chat-container">
             <!-- n8n chat 的内容会被脚本自动添加到这里面 -->
         </div>
@@ -155,26 +200,18 @@
 		    target: '#my-chat-container', // 指向这个容器的 ID
        		mode: 'fullscreen', // 使用全屏模式，使其填满父容器 #my-chat-container
             // 根据目标图片调整以下选项
-            initialMessages: [
-                {
-                    type: 'text',
-                    text: 'Hi, doumn jack' // 对应目标图片中的大标题，作为第一条机器人消息
-                }
-                // 注意：'How can I help you today?' 会通过 inputPlaceholder 显示
-            ],
+            initialMessages: [], // 清空初始消息，标题通过自定义 HTML 显示
             showWelcomeScreen: false, // 不显示欢迎屏幕按钮
-            defaultLanguage: 'en', // 仍需设置为英文，虽然消息可以写中文
-            i18n: { // 尝试覆盖英文界面的部分文本
+            defaultLanguage: 'en', // 仍需设置为英文
+            i18n: { // 覆盖部分文本
                  en: {
-                     title: '', // 清空默认标题，我们用 initialMessages 显示
+                     title: '', // 清空默认标题
                      subtitle: '', // 清空默认副标题
                      footer: '', /* 移除页脚 */
                      getStarted: '', /* 移除欢迎屏幕的“开始”按钮文本 */
-                     inputPlaceholder: 'How can I help you today?', // 设置输入框的占位符文本
+                     inputPlaceholder: '和AI聊聊。。。', // 设置输入框的占位符文本为中文
                  }
-            },
-            // 移除或注释掉您之前尝试设置的头部变量，因为我们已经通过 initialMessages 模拟了头部文本
-            // 并且隐藏了实际的头部区域
+            }
 	    });
     </script>
 
