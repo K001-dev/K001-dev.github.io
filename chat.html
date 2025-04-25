@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 聊天</title> <!-- 这个页面标题保留 -->
+    <title>AI 聊天</title> <!-- 页面标题保留 -->
 
     <!-- 引入 n8n chat 的 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
@@ -102,21 +102,8 @@
             --chat--textarea--height: 50px; /* 输入框高度 */
 
              /* 发送按钮样式 (需要检查实际类名来定位) */
-             /* 根据 n8n chat 文档，发送按钮可能没有独立的 CSS 变量控制 */
              /* 您可能需要根据实际 DOM 结构来调整 */
-             /* 假设输入区域内的发送按钮的类是 .n8n-chat-input-area button */
-             /* #my-chat-container .n8n-chat-input-area button {
-                  background-color: #007bff; /* 蓝色背景 */
-                  /* color: white; /* 白色文字 */
-                  /* border: none; */
-                  /* border-radius: 50%; /* 圆形 */
-                  /* width: 40px; */
-                  /* height: 40px; */
-                  /* display: flex; */
-                  /* align-items: center; */
-                  /* justify-content: center; */
-                  /* cursor: pointer; */
-              /* } */
+             /* #my-chat-container .n8n-chat-input-area button { ... } */
 
 
             /* 其他颜色和变量 */
@@ -131,9 +118,9 @@
        }
 
         /* === 自定义 CSS 规则来修正对齐和内边距 === */
-        /* !!重要!! 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
-        /* 打开浏览器开发者工具 (F12), 选中 "你好" 消息，查看其父级和自身的类名 */
-        /* 下面的类名 `.n8n-chat-messages`, `.n8n-chat-message`, `.n8n-chat-message--user`, `.n8n-chat-message--bot` 是常见的命名，但可能需要修改 */
+        /* !!非常重要!! 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
+        /* 打开浏览器开发者工具 (F12), 选中您的用户消息 ("你好啊，你能干啥？")，查看其父级和自身的类名 */
+        /* 下面的类名 `.n8n-chat-messages`, `.n8n-chat-message`, `.n8n-chat-message--user`, `.n8n-chat-message--bot` 是常见的命名，但可能需要根据您的实际情况修改 */
 
         /* 调整消息列表容器的内边距，确保消息不会贴边 */
         /* 假设消息列表容器的类名是 .n8n-chat-messages */
@@ -144,6 +131,9 @@
              display: flex; /* 使消息容器成为 flex 容器 */
              flex-direction: column; /* 消息垂直排列 */
              padding-bottom: 20px; /* 给消息列表底部留出更多空间，避免被输入框遮挡 */
+             /* 可选：调整消息列表的左右内边距，使其与输入框左右内边距一致 */
+             /* padding-left: 1.5rem; */
+             /* padding-right: 1.5rem; */
         }
 
         /* 修正用户消息靠右对齐 */
@@ -153,8 +143,11 @@
              margin-left: auto !important; /* 自动左外边距，将元素推到最右边 */
              margin-right: 0 !important; /* 确保右外边距为0 */
              align-self: flex-end !important; /* 在 flex 容器内靠右对齐自身 */
-             /* display: flex; /* 如果消息内容本身需要 flex 布局，可能需要 */
-             /* justify-content: flex-end; /* 如果消息内容本身是 flex item，可能需要 */
+             /* 可能需要调整气泡内部内容的对齐，取决于组件内部结构 */
+             /* 假设气泡内的内容容器类名为 .n8n-chat-message-content */
+             /* #my-chat-container .n8n-chat-message--user .n8n-chat-message-content {
+                 text-align: right !important;
+             } */
         }
 
         /* 修正机器人消息靠左对齐 (确保默认行为正确) */
@@ -162,9 +155,12 @@
              margin-right: auto !important; /* 自动右外边距 */
              margin-left: 0 !important; /* 确保左外边距为0 */
              align-self: flex-start !important; /* 在 flex 容器内靠左对齐自身 */
-             /* display: flex; */
-             /* justify-content: flex-start; */
+             /* 假设气泡内的内容容器类名为 .n8n-chat-message-content */
+             /* #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content {
+                 text-align: left !important; /* 确保文本靠左 */
+             } */
         }
+
 
         /* 可选：调整单个消息气泡的最大宽度 */
          #my-chat-container .n8n-chat-message {
@@ -178,6 +174,7 @@
                display: flex;
                align-items: center;
                gap: 10px; /* 输入框和发送按钮之间的间距 */
+               /* margin-left/right: auto; /* 尝试居中整个输入区域 */
            }
            /* #my-chat-container .n8n-chat-input-area .n8n-chat-input { /* 假设输入框类名 */
                flex-grow: 1; /* 输入框占据剩余空间 */
