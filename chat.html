@@ -11,7 +11,7 @@
     <!-- 引入 Google Fonts 或其他字体，以保持风格一致 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
+        <style>
         /* 设置整个页面的背景和字体，并使用 flexbox 居中 */
         html, body {
             width: 100%;
@@ -130,7 +130,7 @@
         /* 2. An individual message element (e.g., .n8n-chat-message) */
         /* 3. A user message element (e.g., .n8n-chat-message--user) */
         /* 4. A bot message element (e.g., .n8n-chat-message--bot) */
-         /* 5. The element INSIDE the message that wraps the text content (e.g., .n8n-chat-message-content) */
+         /* 5. The element INSIDE the message that wraps the text content (e.g., Look for a div or span directly inside the message bubble) */
         /* The class names below are ASSUMPTIONS. Adjust if necessary. */
 
         /* Style the message list container */
@@ -148,49 +148,63 @@
          #my-chat-container .n8n-chat-message { /* ASSUMED class name */
              max-width: 80%; /* Limit bubble width */
              margin-bottom: 12px; /* Space between messages */
-             /* Ensure messages are display: flex to potentially align content inside */
-             /* Remove display: flex here, it might interfere with text-align */
+             /* Removed display: flex from here as it might interfere with text-align on the parent */
          }
 
         /* Align USER messages to the RIGHT */
-        #my-chat-container .n8n-chat-message--user { /* ASSUMED class name */
-             margin-left: auto !important; /* Auto left margin pushes it right */
-             margin-right: 0 !important; /* Ensure no right margin */
-             align-self: flex-end !important; /* Align the item itself to the end of the flex container */
+        #my-chat-container .n8n-chat-message--user { /* ASSUMED class name for user bubble */
+             margin-left: auto !important; /* Pushes the whole bubble to the right */
+             margin-right: 0 !important;
+             align-self: flex-end !important; /* Also helps align the bubble itself */
              /* Adjust bubble shape specific to user message */
-             border-top-right-radius: var(--chat--border-radius, 18px); /* Top-right corner is sharp or less rounded */
+             border-top-right-radius: var(--chat--border-radius, 18px); /* Sharp corner top-right */
              border-top-left-radius: var(--chat--border-radius, 18px); /* Soft top-left */
              border-bottom-left-radius: var(--chat--border-radius, 18px); /* Soft bottom-left */
-             border-bottom-right-radius: 4px; /* Sharp or less rounded bottom-right */
-             /* Add text alignment for the user message bubble itself */
-             text-align: right !important; /* Align text content inside the bubble to the right */
+             border-bottom-right-radius: 4px; /* Soft bottom-right */
+
+             /* **Attempt 1: Align text content by setting text-align on the bubble container** */
+             text-align: right !important;
         }
 
         /* Align BOT messages to the LEFT (default behavior) */
-        #my-chat-container .n8n-chat-message--bot { /* ASSUMED class name */
-             margin-right: auto !important; /* Auto right margin */
-             margin-left: 0 !important; /* Ensure no left margin */
-             align-self: flex-start !important; /* Align the item itself to the start of the flex container */
+        #my-chat-container .n8n-chat-message--bot { /* ASSUMED class name for bot bubble */
+             margin-right: auto !important; /* Pushes the whole bubble to the left */
+             margin-left: 0 !important;
+             align-self: flex-start !important; /* Also helps align the bubble itself */
              /* Adjust bubble shape specific to bot message */
-             border-top-left-radius: var(--chat--border-radius, 18px); /* Top-left corner is sharp or less rounded */
+             border-top-left-radius: var(--chat--border-radius, 18px); /* Sharp corner top-left */
              border-top-right-radius: var(--chat--border-radius, 18px); /* Soft top-right */
-             border-bottom-left-radius: 4px; /* Sharp or less rounded bottom-left */
+             border-bottom-left-radius: 4px; /* Soft bottom-left */
              border-bottom-right-radius: var(--chat--border-radius, 18px); /* Soft bottom-right */
-             /* Add text alignment for the bot message bubble itself */
-             text-align: left !important; /* Align text content inside the bubble to the left */
+
+              /* **Attempt 1: Align text content by setting text-align on the bubble container** */
+             text-align: left !important; /* (Usually default, but explicit is fine) */
         }
 
-        /* Optional: Refine text alignment by targeting the inner content element */
-        /* This might be needed if text-align on the bubble element itself isn't enough */
-        /* Assuming the content inside the bubble has a class like .n8n-chat-message-content */
-         #my-chat-container .n8n-chat-message--user .n8n-chat-message-content { /* ASSUMED class name */
-             text-align: right !important; /* Align text right within user bubble content */
-             width: 100%; /* Ensure content element takes full width within bubble */
-         }
-         #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content { /* ASSUMED class name */
-             text-align: left !important; /* Align text left within bot bubble content */
-              width: 100%; /* Ensure content element takes full width within bubble */
-         }
+        /* **Attempt 2: Refine text alignment by targeting potential inner content elements** */
+        /* Target common inner container elements directly within the message bubble */
+        /* You need to verify these class names or element types with F12 */
+        #my-chat-container .n8n-chat-message--user .n8n-chat-message-content, /* Assumed class from docs/examples */
+        #my-chat-container .n8n-chat-message--user > div, /* Common: direct div child */
+        #my-chat-container .n8n-chat-message--user > span /* Common: direct span child */
+        {
+            text-align: right !important; /* **Force text alignment to the right** */
+            /* If the text is still left, check for inline styles or other conflicting rules in F12 */
+            /* width: 100%; /* Ensure the inner element takes full width if needed */
+             /* If the text is wrapping unexpectedly, this might help */
+            word-break: break-word; /* Prevents long words from overflowing */
+            overflow-wrap: break-word; /* Also helps with breaking long text */
+        }
+
+        #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content, /* Assumed class */
+        #my-chat-container .n8n-chat-message--bot > div, /* Direct div child */
+        #my-chat-container .n8n-chat-message--bot > span /* Direct span child */
+        {
+            text-align: left !important; /* **Force text alignment to the left** */
+             /* width: 100%; */
+             word-break: break-word;
+             overflow-wrap: break-word;
+        }
 
 
         /* Style the input area - this contains the text input and the send button */
