@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 聊天</title> {/* 这个页面的标题 */}
+    <title>AI 聊天</title> {/* 页面标题保留，注释删除 */}
 
     <!-- 引入 n8n chat 的 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
@@ -24,15 +24,16 @@
             color: #333; /* 设置默认文本颜色 */
             display: flex; /* 使用 flex 布局来居中内容 */
             justify-content: center; /* 水平居中 */
-            align-items: center; /* 垂直居中 */
+            align-items: center; /* 这是一个额外的垂直居中，可以帮助但可能不是必须的，取决于具体需求 */
             min-height: 100vh; /* 确保 body 至少占满整个视口高度 */
         }
 
         /* 外部容器，用于限制聊天窗口的尺寸并添加阴影 */
         #chat-wrapper {
-            width: 95%; /* 稍大一点，或者保持100%和max-width */
+            width: 95%; /* 允许一些弹性 */
             max-width: 800px; /* 设置一个最大宽度，你可以根据需要调整 */
-            height: 90%; /* 设置一个高度，或者使用 max-height */
+            height: 90%; /* 设置一个高度 */
+            max-height: 700px; /* 也可以设置最大高度 */
             background-color: #ffffff; /* 设置主聊天区域的白色背景 */
             border-radius: 15px; /* 设置外层圆角 */
             overflow: hidden; /* 隐藏超出容器的滚动条等 */
@@ -43,10 +44,10 @@
             padding: 20px; /* 给外层 wrapper 添加一些内边距 */
         }
 
-        /* 自定义标题样式 */
+        /* 自定义标题样式 - 匹配图一的样式 */
         .custom-header {
             text-align: center; /* 文本居中 */
-            font-size: 2em; /* 较大的字号 */
+            font-size: 2em; /* 较大的字号，匹配图一的Hi, doumn jack */
             font-weight: 600; /* 加粗 */
             color: #333; /* 文字颜色 */
             margin-bottom: 20px; /* 标题下方留白 */
@@ -131,22 +132,23 @@
              flex-grow: 1; /* 在 flex 布局中占据剩余空间 */
              display: flex; /* 使消息容器成为 flex 容器 */
              flex-direction: column; /* 消息垂直排列 */
+             padding-bottom: 20px; /* 给消息列表底部留出更多空间，避免被输入框遮挡 */
         }
 
         /* 修正用户消息靠右对齐 */
         /* 假设单个消息容器的类名是 .n8n-chat-message */
         /* 用户消息的特定类名是 .n8n-chat-message--user 或 .user */
         #my-chat-container .n8n-chat-message--user { /* 或者其他实际的类名 */
-             margin-left: auto; /* 自动左外边距，将元素推到最右边 */
-             margin-right: 0; /* 确保右外边距为0 */
+             margin-left: auto !important; /* 自动左外边距，将元素推到最右边 */
+             margin-right: 0 !important; /* 确保右外边距为0 */
              /* display: flex; /* 如果消息内容本身需要 flex 布局，可能需要 */
              /* justify-content: flex-end; /* 如果消息内容本身是 flex item，可能需要 */
         }
 
         /* 修正机器人消息靠左对齐 (确保默认行为正确) */
         #my-chat-container .n8n-chat-message--bot { /* 或者其他实际的类名 */
-             margin-right: auto; /* 自动右外边距 */
-             margin-left: 0; /* 确保左外边距为0 */
+             margin-right: auto !important; /* 自动右外边距 */
+             margin-left: 0 !important; /* 确保左外边距为0 */
              /* display: flex; */
              /* justify-content: flex-start; */
         }
@@ -177,9 +179,9 @@
 
     <!-- 外部容器，用于居中和设置尺寸 -->
     <div id="chat-wrapper">
-        <!-- 自定义标题 -->
+        <!-- 自定义标题 - 根据要求修改文本 -->
         <div class="custom-header">
-            Hi, doumn jack
+            Hi, How can I help you today?
         </div>
 
         <!-- 这是聊天界面将被嵌入的容器 -->
@@ -209,7 +211,8 @@
                      subtitle: '', // 清空默认副标题
                      footer: '', /* 移除页脚 */
                      getStarted: '', /* 移除欢迎屏幕的“开始”按钮文本 */
-                     inputPlaceholder: '和AI聊聊。。。', // 设置输入框的占位符文本为中文
+                     // 根据第一张图片，输入框占位符是英文
+                     inputPlaceholder: 'How can I help you today?',
                  }
             }
 	    });
