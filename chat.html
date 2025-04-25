@@ -77,8 +77,8 @@
             --chat--header--border-bottom: none;
 
             /* Message bubble styles */
-            --chat--message--bot--background: #ffffff; /* Bot message background (white) */
-            --chat--message--bot--color: #333; /* Bot message text color */
+            --chat--message--bot--background: #ffffff; /* Robot message background (white) */
+            --chat--message--bot--color: #333; /* Robot message text color */
             --chat--message--bot--border: 1px solid #e9ecef; /* Optional: subtle border */
             --chat--message--user--background: #007bff; /* User message background (blue) */
             --chat--message--user--color: #ffffff; /* User message text color (white for contrast) */
@@ -130,6 +130,7 @@
         /* 2. An individual message element (e.g., .n8n-chat-message) */
         /* 3. A user message element (e.g., .n8n-chat-message--user) */
         /* 4. A bot message element (e.g., .n8n-chat-message--bot) */
+         /* 5. The element INSIDE the message that wraps the text content (e.g., .n8n-chat-message-content) */
         /* The class names below are ASSUMPTIONS. Adjust if necessary. */
 
         /* Style the message list container */
@@ -148,8 +149,7 @@
              max-width: 80%; /* Limit bubble width */
              margin-bottom: 12px; /* Space between messages */
              /* Ensure messages are display: flex to potentially align content inside */
-             display: flex;
-             /* align-items: flex-start; /* Or center, depending on desired internal alignment */
+             /* Remove display: flex here, it might interfere with text-align */
          }
 
         /* Align USER messages to the RIGHT */
@@ -162,6 +162,8 @@
              border-top-left-radius: var(--chat--border-radius, 18px); /* Soft top-left */
              border-bottom-left-radius: var(--chat--border-radius, 18px); /* Soft bottom-left */
              border-bottom-right-radius: 4px; /* Sharp or less rounded bottom-right */
+             /* Add text alignment for the user message bubble itself */
+             text-align: right !important; /* Align text content inside the bubble to the right */
         }
 
         /* Align BOT messages to the LEFT (default behavior) */
@@ -174,15 +176,20 @@
              border-top-right-radius: var(--chat--border-radius, 18px); /* Soft top-right */
              border-bottom-left-radius: 4px; /* Sharp or less rounded bottom-left */
              border-bottom-right-radius: var(--chat--border-radius, 18px); /* Soft bottom-right */
+             /* Add text alignment for the bot message bubble itself */
+             text-align: left !important; /* Align text content inside the bubble to the left */
         }
 
-        /* Optional: Adjust text alignment inside the bubbles if needed */
+        /* Optional: Refine text alignment by targeting the inner content element */
+        /* This might be needed if text-align on the bubble element itself isn't enough */
         /* Assuming the content inside the bubble has a class like .n8n-chat-message-content */
          #my-chat-container .n8n-chat-message--user .n8n-chat-message-content { /* ASSUMED class name */
-             text-align: right; /* Align text right within user bubble */
+             text-align: right !important; /* Align text right within user bubble content */
+             width: 100%; /* Ensure content element takes full width within bubble */
          }
          #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content { /* ASSUMED class name */
-             text-align: left; /* Align text left within bot bubble */
+             text-align: left !important; /* Align text left within bot bubble content */
+              width: 100%; /* Ensure content element takes full width within bubble */
          }
 
 
@@ -250,7 +257,7 @@
                  }
             },
              // Optional: Add any initial chat messages here if desired, but the image doesn't show them initially
-            // initialMessages: ['和AI聊聊。。。'], // Example initial bot message
+            // initialMessages: ['你好！有什么可以帮您的吗?'], // Example initial bot message
 	    });
     </script>
 
