@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- n8n chat 的 CSS 链接，放在 <head> 里 - 【正确】 -->
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -28,6 +32,46 @@
         .social-icon:hover {
             transform: scale(1.2);
         }
+
+        /* 自定义 n8n chat 的 CSS 变量和容器样式 */
+        /* 放在 #my-chat-container 下可以更精确地作用于聊天组件本身 */
+       #my-chat-container {
+            /* 设置容器本身的样式，比如边框、背景、阴影等 */
+            border: 1px solid #e2e8f0; /* 边框 */
+            border-radius: 0.75rem; /* 圆角 */
+            overflow: hidden; /* 确保内容不溢出圆角 */
+            background-color: #ffffff; /* 容器背景色 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* 阴影 */
+            /* 容器的尺寸和位置通过 inline style 或外部 CSS 设置 */
+            width: 80%; /* 宽度 */
+            margin: 20px auto; /* 居中 */
+            height: 600px; /* 高度 */
+            max-width: 800px; /* 添加最大宽度，让它在宽屏幕上不会太大 */
+
+
+            /* 覆盖 n8n chat 内部元素的 CSS 变量来改变外观 */
+            /* 参考 n8n 文档中的 Customization 部分来调整这些值 */
+            --chat--color-dark: #f8fafc; /* 头部背景设为接近页面背景 */
+            --chat--color-light: #333; /* 头部文字颜色 */
+            --chat--border-radius: 0; /* 如果容器有圆角，chat 内部元素可以不带圆角 */
+            --chat--message--bot--background: #e2e8f0; /* 机器人消息背景色 */
+            --chat--message--bot--color: #1e293b; /* 机器人消息文字颜色 */
+            --chat--message--user--background: #93c5fd; /* 用户消息背景色 (浅蓝色) */
+            --chat--message--user--color: #1e3a8a; /* 用户消息文字颜色 (深蓝色) */
+            --chat--header--background: #f8fafc; /* 头部背景颜色与页面一致 */
+            --chat--header--color: #1e293b; /* 头部文字颜色 */
+            --chat--header--border-bottom: 1px solid #e2e8f0; /* 添加底部边框 */
+            --chat--header--padding: 1.5rem 1rem; /* 调整头部内边距 */
+            --chat--heading--font-size: 1.8em; /* 调整标题字号 */
+            --chat--subtitle--font-size: 1.1em; /* 调整副标题字号 */
+            /* 更多变量... */
+       }
+
+         /* 如果使用了 mode: 'fullscreen' 并且容器有固定高度 */
+         /* 可能需要一些CSS来确保内容区域滚动，而不是整个页面滚动 */
+         /* 例如，检查生成的DOM，找到消息列表的容器类，并给它设置 overflow-y: auto; */
+         /* .n8n-chat-messages-container { overflow-y: auto; } */ /* 这个类名需要根据实际生成的 DOM 检查 */
+
     </style>
 </head>
 <body class="antialiased text-gray-800">
@@ -76,6 +120,15 @@
             </div>
         </div>
     </header>
+    <!-- 在你希望显示聊天框的位置添加这个容器 -->
+    <!-- 例如，这里放在英雄区域下方，关于我区域上方 -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+         <h2 class="text-3xl font-bold text-center mb-8">和 AI 聊聊</h2>
+         <!-- 这就是你提供的容器，使用 inline style 也可以，或者转移到 CSS style 块中 -->
+         <div id="my-chat-container" style="width: 80%; margin: 20px auto; height: 600px;">
+              <!-- n8n chat 的内容会被脚本自动添加到这里面 -->
+         </div>
+    </main>
 
     <!-- 关于我 -->
     <section id="about" class="py-20 bg-white">
@@ -136,7 +189,7 @@
                         <a href="#" class="text-indigo-600 font-medium hover:underline">查看详情 →</a>
                     </div>
                 </div>
-                
+
                 <!-- 项目2 -->
                 <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover transition duration-300">
                     <img src="https://picsum.photos/600/400?random=4" alt="项目2" class="w-full h-48 object-cover">
@@ -150,7 +203,7 @@
                         <a href="#" class="text-indigo-600 font-medium hover:underline">查看详情 →</a>
                     </div>
                 </div>
-                
+
                 <!-- 项目3 -->
                 <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover transition duration-300">
                     <img src="https://picsum.photos/600/400?random=5" alt="项目3" class="w-full h-48 object-cover">
@@ -166,7 +219,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="text-center mt-12">
                 <a href="#" class="inline-block border border-indigo-600 text-indigo-600 px-6 py-2 rounded-full font-medium hover:bg-indigo-600 hover:text-white transition">查看更多项目</a>
             </div>
@@ -197,7 +250,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <h3 class="text-xl font-semibold mt-8 mb-4">关注我</h3>
                         <div class="flex space-x-4">
                             <a href="#" class="social-icon text-gray-600 hover:text-indigo-500">
@@ -315,13 +368,16 @@
             });
         });
     </script>
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-    <script type="module">
-	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-	    createChat({
-		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat'
-	    });
-    </script>
+    <!-- n8n chat 的脚本，独立出来，放在原有脚本后面，但都在 </body> 之前 -->
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+		webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // 替换为你的实际 URL
+		target: '#my-chat-container', // 指向你刚才添加的容器的 ID
+       		mode: 'fullscreen' // 使用全屏模式填充容器
+	});
+</script>
 </body>
 </html>
