@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 聊天</title> {/* 页面标题保留，注释删除 */}
+    <title>AI 聊天</title> <!-- 这个页面标题保留 -->
 
     <!-- 引入 n8n chat 的 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* 设置整个页面的背景和字体 */
+        /* 设置整个页面的背景和字体，并使用 flexbox 居中 */
         html, body {
             width: 100%;
             height: 100%;
@@ -23,35 +23,37 @@
             background-color: #f0f2f5; /* 设置一个非常浅的灰色背景 */
             color: #333; /* 设置默认文本颜色 */
             display: flex; /* 使用 flex 布局来居中内容 */
-            justify-content: center; /* 水平居中 */
-            align-items: center; /* 这是一个额外的垂直居中，可以帮助但可能不是必须的，取决于具体需求 */
+            justify-content: center; /* 水平居中外层容器 */
+            align-items: center; /* 垂直居中外层容器 */
             min-height: 100vh; /* 确保 body 至少占满整个视口高度 */
         }
 
         /* 外部容器，用于限制聊天窗口的尺寸并添加阴影 */
         #chat-wrapper {
-            width: 95%; /* 允许一些弹性 */
-            max-width: 800px; /* 设置一个最大宽度，你可以根据需要调整 */
+            width: 95%; /* 允许一些弹性，不要固定太死 */
+            max-width: 800px; /* 设置一个最大宽度，可根据需要调整 */
             height: 90%; /* 设置一个高度 */
             max-height: 700px; /* 也可以设置最大高度 */
             background-color: #ffffff; /* 设置主聊天区域的白色背景 */
             border-radius: 15px; /* 设置外层圆角 */
-            overflow: hidden; /* 隐藏超出容器的滚动条等 */
+            overflow: hidden; /* 隐藏超出容器的内容 */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 添加一个阴影 */
             display: flex; /* 使其成为 flex 容器 */
             flex-direction: column; /* 子元素垂直排列 */
             box-sizing: border-box; /* 确保 padding 不会增加总尺寸 */
             padding: 20px; /* 给外层 wrapper 添加一些内边距 */
+            position: relative; /* 添加相对定位，有时对内部定位有帮助 */
         }
 
         /* 自定义标题样式 - 匹配图一的样式 */
         .custom-header {
             text-align: center; /* 文本居中 */
-            font-size: 2em; /* 较大的字号，匹配图一的Hi, doumn jack */
+            font-size: 2em; /* 较大的字号 */
             font-weight: 600; /* 加粗 */
             color: #333; /* 文字颜色 */
             margin-bottom: 20px; /* 标题下方留白 */
             padding: 0 10px; /* 左右稍微有点内边距 */
+            flex-shrink: 0; /* 确保标题不会被压缩 */
         }
 
         /* 这是聊天界面将被嵌入的容器 */
@@ -99,11 +101,22 @@
             --chat--input-box-shadow: none; /* 移除阴影 */
             --chat--textarea--height: 50px; /* 输入框高度 */
 
-
              /* 发送按钮样式 (需要检查实际类名来定位) */
-             /* 例如，如果发送按钮的类是 .n8n-chat-send-button */
+             /* 根据 n8n chat 文档，发送按钮可能没有独立的 CSS 变量控制 */
              /* 您可能需要根据实际 DOM 结构来调整 */
-             /* .n8n-chat-input-area button { ... } */
+             /* 假设输入区域内的发送按钮的类是 .n8n-chat-input-area button */
+             /* #my-chat-container .n8n-chat-input-area button {
+                  background-color: #007bff; /* 蓝色背景 */
+                  /* color: white; /* 白色文字 */
+                  /* border: none; */
+                  /* border-radius: 50%; /* 圆形 */
+                  /* width: 40px; */
+                  /* height: 40px; */
+                  /* display: flex; */
+                  /* align-items: center; */
+                  /* justify-content: center; */
+                  /* cursor: pointer; */
+              /* } */
 
 
             /* 其他颜色和变量 */
@@ -118,15 +131,13 @@
        }
 
         /* === 自定义 CSS 规则来修正对齐和内边距 === */
-        /* 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
-        /* 以下类名为常见或可能的类名，您可能需要根据浏览器开发者工具检查来调整 */
-
-        /* 隐藏可能存在的默认头部元素 */
-        /* .n8n-chat-header-container, .chat-header { display: none !important; } /* 假设的类名 */
+        /* !!重要!! 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
+        /* 打开浏览器开发者工具 (F12), 选中 "你好" 消息，查看其父级和自身的类名 */
+        /* 下面的类名 `.n8n-chat-messages`, `.n8n-chat-message`, `.n8n-chat-message--user`, `.n8n-chat-message--bot` 是常见的命名，但可能需要修改 */
 
         /* 调整消息列表容器的内边距，确保消息不会贴边 */
-        /* 假设消息列表容器的类名是 .n8n-chat-messages 或 .chat-messages-list */
-        #my-chat-container .n8n-chat-messages { /* 或者其他实际的类名 */
+        /* 假设消息列表容器的类名是 .n8n-chat-messages */
+        #my-chat-container .n8n-chat-messages {
              padding: 10px; /* 添加内边距，避免消息贴左或贴右，也给顶部和底部留白 */
              overflow-y: auto; /* 确保消息列表可滚动 */
              flex-grow: 1; /* 在 flex 布局中占据剩余空间 */
@@ -137,24 +148,26 @@
 
         /* 修正用户消息靠右对齐 */
         /* 假设单个消息容器的类名是 .n8n-chat-message */
-        /* 用户消息的特定类名是 .n8n-chat-message--user 或 .user */
-        #my-chat-container .n8n-chat-message--user { /* 或者其他实际的类名 */
+        /* 用户消息的特定类名是 .n8n-chat-message--user */
+        #my-chat-container .n8n-chat-message--user {
              margin-left: auto !important; /* 自动左外边距，将元素推到最右边 */
              margin-right: 0 !important; /* 确保右外边距为0 */
+             align-self: flex-end !important; /* 在 flex 容器内靠右对齐自身 */
              /* display: flex; /* 如果消息内容本身需要 flex 布局，可能需要 */
              /* justify-content: flex-end; /* 如果消息内容本身是 flex item，可能需要 */
         }
 
         /* 修正机器人消息靠左对齐 (确保默认行为正确) */
-        #my-chat-container .n8n-chat-message--bot { /* 或者其他实际的类名 */
+        #my-chat-container .n8n-chat-message--bot {
              margin-right: auto !important; /* 自动右外边距 */
              margin-left: 0 !important; /* 确保左外边距为0 */
+             align-self: flex-start !important; /* 在 flex 容器内靠左对齐自身 */
              /* display: flex; */
              /* justify-content: flex-start; */
         }
 
         /* 可选：调整单个消息气泡的最大宽度 */
-         #my-chat-container .n8n-chat-message { /* 或者其他实际的类名 */
+         #my-chat-container .n8n-chat-message {
              max-width: 85%; /* 限制消息气泡宽度 */
              margin-bottom: 10px; /* 消息之间留白 */
          }
@@ -200,7 +213,7 @@
 	    createChat({
 		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // 替换为你的实际 URL
 		    target: '#my-chat-container', // 指向这个容器的 ID
-       		mode: 'fullscreen', // 使用全屏模式，使其填满父容器 #my-chat-container
+       		mode: 'fullscreen', // 使用全屏模式，使其填满父容器 #my-chat-container 的剩余空间
             // 根据目标图片调整以下选项
             initialMessages: [], // 清空初始消息，标题通过自定义 HTML 显示
             showWelcomeScreen: false, // 不显示欢迎屏幕按钮
