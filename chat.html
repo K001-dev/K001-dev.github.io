@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天</title> {# 这个页面的标题 #}
+
+    <!-- 引入 n8n chat 的 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
+    <!-- 如果需要 Tailwind 的基础样式，可以在这里引入 -->
+    {# <script src="https://cdn.tailwindcss.com"></script> #}
+
+    <!-- 引入 Google Fonts 或其他字体，以保持风格一致 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <style>
+        /* 确保 html, body 和聊天容器填满整个视口，实现全屏效果 */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 隐藏滚动条，让聊天组件自己处理滚动 */
+            font-family: 'Inter', sans-serif; /* 使用相同的字体 */
+            background-color: #f8fafc; /* 设置背景色，与目标图片接近 */
+            color: #1e293b; /* 设置默认文本颜色 */
+        }
+
+        /* 聊天界面将被嵌入的容器 */
+        #my-chat-container {
+            width: 100%;
+            height: 100%;
+            /* mode: 'fullscreen' 会让 chat 组件填满这个容器 */
+        }
+
+        /* 覆盖 n8n chat 内部元素的 CSS 变量来改变外观 */
+        /* 参考 n8n 文档和你的目标图片来调整这些值 */
+       #my-chat-container { /* 将变量定义在容器下，确保只影响聊天组件 */
+            /* 头部样式 */
+            --chat--header-height: 60px; /* 可以给头部一个固定高度 */
+            --chat--header--padding: 0 1rem; /* 调整内边距 */
+            --chat--header--background: #ffffff; /* 头部背景色 (白色) */
+            --chat--header--color: #1e293b; /* 头部文字颜色 (深色) */
+            --chat--header--border-bottom: 1px solid #e2e8f0; /* 添加浅灰色底部边框 */
+            --chat--heading--font-size: 1.5em; /* 调整标题字号 */
+            --chat--subtitle--font-size: 1em; /* 调整副标题字号 */
+            --chat--header--display: flex; /* 让头部内容flex布局 */
+            --chat--header--align-items: center; /* 垂直居中 */
+            --chat--header--justify-content: center; /* 水平居中，如果只有标题 */
+
+            /* 消息气泡样式 */
+            --chat--message--bot--background: #ffffff; /* 机器人消息背景色 (白色，像目标图) */
+            --chat--message--bot--color: #1e293b; /* 机器人消息文字颜色 */
+            --chat--message--user--background: #e2e8f0; /* 用户消息背景色 (浅灰，像目标图) */
+            --chat--message--user--color: #1e293b; /* 用户消息文字颜色 */
+            --chat--border-radius: 0.5rem; /* 消息气泡圆角 */
+            --chat--message--padding: 0.75rem 1rem; /* 消息内边距 */
+            --chat--message-line-height: 1.6; /* 行高 */
+            --chat--spacing: 1rem; /* 基本间距，影响消息之间的距离等 */
+
+
+            /* 输入框样式 */
+            --chat--textarea--height: 50px; /* 输入框高度 */
+             /* 输入区域整体样式 */
+            --chat--input-area-background: #ffffff; /* 输入区域背景色 */
+            --chat--input-area-padding: 1rem; /* 输入区域内边距 */
+            --chat--input-area-border-top: 1px solid #e2e8f0; /* 输入区域上边框 */
+
+
+            /* 输入框内部样式 */
+            --chat--input-background: #ffffff; /* 输入框背景色 */
+            --chat--input-color: #1e293b; /* 输入框文字颜色 */
+            --chat--input-padding: 0.5rem 1rem; /* 输入框内边距 */
+            --chat--input-border-radius: 0.5rem; /* 输入框圆角 */
+            --chat--input-border: 1px solid #d1d5db; /* 输入框边框 */
+            --chat--input-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* 输入框阴影 */
+
+
+            /* 按钮颜色 (发送按钮等) */
+             --chat--color-primary: #3b82f6; /* 例如，蓝色作为主题色 */
+             --chat--color-primary-shade-50: #2563eb;
+            --chat--color-white: #ffffff; /* 白色通常用于按钮文字 */
+
+
+            /* 更多变量... 根据文档和需要调整 */
+
+            /* 可能需要一些自定义 CSS 来调整布局，如果只覆盖变量不够 */
+             /* 例如，调整消息列表的滚动行为 */
+            /* .n8n-chat-messages-container { overflow-y: auto; padding: var(--chat--spacing); } */ /* 这个类名需要根据实际生成的 DOM 检查 */
+            /* 可能需要调整 header 内部元素的 flex 或 grid 布局，取决于 n8n chat 组件的实现 */
+
+
+       }
+    </style>
+</head>
+<body>
+
+    <!-- 这是聊天界面将被嵌入的容器 -->
+    <div id="my-chat-container">
+        <!-- n8n chat 的内容会被脚本自动添加到这里面 -->
+    </div>
+
+    <!-- 引入 n8n chat 的 JavaScript 脚本 -->
+    <!-- 放在 body 结束标签之前，确保容器 div 已经存在 -->
+    <script type="module">
+	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	    createChat({
+		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // 替换为你的实际 URL
+		    target: '#my-chat-container', // 指向这个容器的 ID
+       		mode: 'fullscreen', // 使用全屏模式
+            // 可以根据需要添加其他选项，比如 initialMessages, showWelcomeScreen 等
+            initialMessages: [
+                "您好！有什么可以帮助您的吗？ 👋", // 可以自定义欢迎消息
+                "我是您的AI助手，请告诉我您的问题。"
+            ],
+            showWelcomeScreen: true, // 可以选择显示欢迎屏幕
+            defaultLanguage: 'en', // 目前只支持英文，虽然消息可以写中文
+            i18n: { // 可以尝试覆盖英文翻译，但效果可能有限
+                 en: {
+                     title: 'AI 聊天',
+                     subtitle: '有什么问题可以问我',
+                     footer: '', /* 可以放一些页脚信息 */
+                     getStarted: '开始新的对话',
+                     inputPlaceholder: '请输入您的问题...',
+                 }
+            }
+	    });
+    </script>
+
+</body>
+</html>
