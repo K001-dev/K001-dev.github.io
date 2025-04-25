@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 聊天</title> <!-- 页面标题保留 -->
+    <title>AI 聊天</title>
 
     <!-- 引入 n8n chat 的 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
-    <!-- 引入 Google Fonts 或其他字体，以保持风格一致 -->
+    <!-- 引入 Google Fonts 或其他字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-           <style>
+    <style>
         /* 设置整个页面的背景和字体，并使用 flexbox 居中 */
         html, body {
             width: 100%;
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden; /* Hide body scrollbar, chat component handles its own */
-            font-family: 'Inter', sans-serif; /* Use consistent font */
+            font-family: 'Inter', sans-serif;
             background-color: #f0f2f5; /* Light gray background */
             color: #333; /* Default text color */
             display: flex; /* Use flexbox for centering */
@@ -44,7 +44,7 @@
             position: relative; /* Add relative positioning */
         }
 
-        /* Custom header styles - match image */
+        /* Custom header styles */
         .custom-header {
             text-align: center; /* Center text */
             font-size: 1.5em; /* Font size */
@@ -57,21 +57,22 @@
         }
 
         /* This is the container where the chat interface will be embedded */
-        /* In fullscreen mode, this container fills the remaining space of its parent (#chat-wrapper) */
+        /* It's a Flex container for the main chat layout and input area */
         #my-chat-container {
             width: 100%;
-            flex-grow: 1; /* Let it take up the remaining vertical space */
-            position: relative; /* Needed for fullscreen mode potentially */
-            display: flex; /* Make this a flex container */
-            flex-direction: column; /* Arrange internal elements (messages, input) vertically */
-             /* Ensure this container itself can establish a height for its children */
-             /* min-height: 0; /* Might be needed here too */
-             /* overflow: hidden; /* Should be handled by wrapper, but defensive */
+            flex-grow: 1; /* Allow it to take up remaining space in #chat-wrapper */
+            position: relative;
+            display: flex; /* Make it a flex container */
+            flex-direction: column; /* Arrange children (main chat area and input) vertically */
+            /* *** KEY FIX 1: Allow this flex item to shrink in parent (#chat-wrapper) *** */
+            min-height: 0 !important;
+            /* Keep overflow hidden here, scrolling happens inside its children */
+            overflow: hidden;
         }
 
-        /* Override n8n chat internal CSS variables */
+        /* Override n8n chat internal CSS variables - Apply to the container holding the component */
        #my-chat-container {
-            /* Header style - Hide component's header */
+            /* Header style - Hide component's default header */
             --chat--header-height: 0px;
             --chat--header--padding: 0;
             --chat--header--border-bottom: none;
@@ -114,25 +115,58 @@
        }
 
         /* === Custom CSS rules === */
-        /* !! IMPORTANT !! Use F12 to verify class names and computed styles if needed */
+        /* Based on your F12 output: #my-chat-container > main.chat-layout... > div.chat-body > div.chat-messages-list */
 
-        /* Style the message list container - This should be the scrolling area */
-        /* This selector is CRITICAL for scrolling. Verify the class name '.n8n-chat-messages' with F12 */
-        #my-chat-container .n8n-chat-messages { /* ASSUMED class name for the message list wrapper */
-             padding: 15px 20px !important; /* Padding inside the message list area, important just in case */
-             overflow-y: auto !important; /* **Force vertical scrolling, HIGH PRIORITY** */
-             flex-grow: 1 !important; /* **Allow this area to grow and fill space, HIGH PRIORITY** */
+        /* Style the main chat layout container (Flex parent of chat-body and input area) */
+        /* Uses the class observed in your F12 screenshot */
+        #my-chat-container main.chat-layout {
+             display: flex !important; /* Ensure it's a flex container */
+             flex-direction: column !important; /* Stack children vertically */
+             flex-grow: 1 !important; /* Allow it to grow and fill #my-chat-container */
+             /* *** KEY FIX 2: Allow this flex item to shrink in parent (#my-chat-container) *** */
+             min-height: 0 !important;
+             width: 100% !important; /* Ensure it takes full width */
+        }
+
+
+        /* Style the chat body container (Flex parent of chat-messages-list) */
+        /* Based on your F12 output */
+        #my-chat-container .chat-body {
+             display: flex !important; /* Ensure it's a flex container */
+             flex-direction: column !important; /* Stack children (message list) vertically */
+             flex-grow: 1 !important; /* Allow it to grow and fill its parent (main.chat-layout...) */
+             /* *** KEY FIX 3: Allow this flex item to shrink in parent (main.chat-layout...) *** */
+             min-height: 0 !important;
+             width: 100% !important; /* Ensure it takes full width */
+
+             /* *** IMPORTANT: Remove or override overflow-y here *** */
+             /* If overflow is set here, it might prevent the child (.chat-messages-list) from scrolling */
+             overflow-y: hidden !important; /* Setting to hidden overrides scroll from component if any */
+             /* Or you can just remove this property entirely if not set elsewhere */
+        }
+
+        /* Style the message list container - THIS IS THE SCROLLING AREA */
+        /* Based on your F12 output: div.chat-messages-list */
+        #my-chat-container .chat-messages-list {
+             padding: 15px 20px !important; /* Padding inside the message list area */
+
+             /* **KEY FIX 4: Enable vertical scrolling** */
+             overflow-y: auto !important; /* *** THIS MAKES THE SCROLLBAR APPEAR *** */
+             overflow-x: hidden !important; /* Prevent horizontal scrolling */
+
+             /* **KEY FIX 5: Allow this flex item to grow and fill its parent (.chat-body)** */
+             flex-grow: 1 !important;
+             /* **KEY FIX 6: Allow this flex item to shrink when content overflows** */
+             min-height: 0 !important;
+
              display: flex !important; /* Ensure it's a flex container */
              flex-direction: column !important; /* Stack messages vertically */
-             /* **KEY FIX for flex scrolling issues: Ensure it can shrink** */
-             min-height: 0 !important;
-             height: auto !important; /* Ensure height isn't fixed */
-             max-height: 100% !important; /* Ensure it doesn't exceed parent height */
-             /* Remove any conflicting overflow settings */
-             overflow-x: hidden !important;
-             overflow-y: auto !important; /* Redundant but emphasizes vertical */
 
-             /* Add scrollbar specific styles if desired (optional) */
+             /* Ensure height isn't fixed and respects flex */
+             height: auto !important;
+             max-height: 100% !important;
+
+             /* Optional: Add scrollbar specific styles if desired */
              /*
              &::-webkit-scrollbar { width: 8px; }
              &::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -142,95 +176,89 @@
         }
 
         /* Style individual message elements */
-        /* Verify '.n8n-chat-message' class name with F12 */
-         #my-chat-container .n8n-chat-message {
+        /* Based on your F12 output: div.chat-message */
+         #my-chat-container .chat-message {
              max-width: 80%; /* Limit bubble width */
              margin-bottom: 12px; /* Space between messages */
              /* flex-shrink: 0; /* Prevent messages themselves from shrinking (optional, might prevent some bubble issues) */
          }
 
         /* Align USER messages to the RIGHT and make width fit content */
-        /* Verify '.n8n-chat-message--user' class name with F12 */
-        #my-chat-container .n8n-chat-message--user {
+        /* Based on your F12 output: div.chat-message-from-user */
+        #my-chat-container .chat-message-from-user {
              margin-left: auto !important; /* Pushes the whole bubble to the right */
              margin-right: 0 !important;
-             align-self: flex-end !important; /* Also helps align the bubble itself in flex column */
+             align-self: flex-end !important; /* Helps align the bubble itself in flex column */
 
-             /* **Force width to fit content, HIGH PRIORITY** */
+             /* Ensure width fits content */
              width: fit-content !important;
-             /* Fallback/reinforcement for width */
-             flex-grow: 0 !important;
-             flex-shrink: 1 !important;
-             width: auto !important; /* Ensure it's not fixed */
+             flex-grow: 0 !important; /* Don't grow to fill space */
+             flex-shrink: 1 !important; /* Allow shrinking if needed */
              min-width: 0 !important; /* Ensure it can shrink */
+             width: auto !important; /* Ensure it's not fixed */
 
              /* Adjust bubble shape specific to user message */
-             border-top-right-radius: var(--chat--border-radius, 18px) !important; /* Important added */
+             border-top-right-radius: var(--chat--border-radius, 18px) !important;
              border-top-left-radius: var(--chat--border-radius, 18px) !important;
              border-bottom-left-radius: var(--chat--border-radius, 18px) !important;
              border-bottom-right-radius: 4px !important;
 
-             /* **Ensure text inside is aligned right, HIGH PRIORITY** */
+             /* Ensure text inside is aligned right */
              text-align: right !important; /* Align text content inside the bubble to the right */
 
-             /* Add padding that should be *inside* the bubble, ensure it's applied */
-             padding: var(--chat--message--padding, 0.8rem 1.2rem) !important; /* Use the variable */
+             /* Ensure padding is applied inside */
+             padding: var(--chat--message--padding, 0.8rem 1.2rem) !important;
 
              /* Ensure no conflicting display/sizing */
              display: block !important; /* Ensure it behaves like a block for text-align */
          }
 
         /* Align BOT messages to the LEFT and make width fit content */
-        /* Verify '.n8n-chat-message--bot' class name with F12 */
-        #my-chat-container .n8n-chat-message--bot {
+        /* Based on your F12 output: div.chat-message-from-bot */
+        #my-chat-container .chat-message-from-bot {
              margin-right: auto !important; /* Pushes the whole bubble to the left */
              margin-left: 0 !important;
-             align-self: flex-start !important; /* Also helps align the bubble itself in flex column */
+             align-self: flex-start !important; /* Helps align the bubble itself in flex column */
 
-             /* **Make width fit content for bot messages, HIGH PRIORITY** */
+             /* Ensure width fits content */
              width: fit-content !important;
              flex-grow: 0 !important;
              flex-shrink: 1 !important;
-             width: auto !important;
              min-width: 0 !important;
+             width: auto !important;
 
              /* Adjust bubble shape specific to bot message */
-             border-top-left-radius: var(--chat--border-radius, 18px) !important; /* Important added */
+             border-top-left-radius: var(--chat--border-radius, 18px) !important;
              border-top-right-radius: var(--chat--border-radius, 18px) !important;
              border-bottom-left-radius: 4px !important;
              border-bottom-right-radius: var(--chat--border-radius, 18px) !important;
 
-             /* **Ensure text inside is aligned left, HIGH PRIORITY** */
+             /* Ensure text inside is aligned left */
              text-align: left !important; /* Align text content inside the bubble to the left */
 
-             /* Add padding that should be *inside* the bubble, ensure it's applied */
-             padding: var(--chat--message--padding, 0.8rem 1.2rem) !important; /* Use the variable */
+             /* Ensure padding is applied inside */
+             padding: var(--chat--message--padding, 0.8rem 1.2rem) !important;
 
              /* Ensure no conflicting display/sizing */
              display: block !important;
         }
 
         /* **Refine text alignment/wrapping by targeting potential inner content elements** */
-        /* This is a fallback/reinforcement. Verify actual structure with F12 */
-        /* Target common inner container elements directly within the message bubble */
-        /* Verify these selectors with F12 */
-        #my-chat-container .n8n-chat-message--user .n8n-chat-message-content, /* Assumed inner content class */
-        #my-chat-container .n8n-chat-message--user > div, /* Common: direct div child */
-        #my-chat-container .n8n-chat-message--user > span /* Common: direct span child */
+        /* Based on your F12 output: div.chat-message-markdown */
+        #my-chat-container .chat-message-from-user .chat-message-markdown,
+        #my-chat-container .chat-message-from-user .chat-message-markdown > *
         {
             text-align: right !important; /* **Force text alignment to the right, HIGH PRIORITY** */
             max-width: 100% !important; /* Ensure inner content stays within bubble width */
             word-break: break-word !important; /* Helps with breaking long words */
             overflow-wrap: break-word !important; /* Alternative for word break */
-            /* Ensure no conflicting padding/margin/display on inner element */
-             padding: 0 !important;
-             margin: 0 !important;
-             display: block !important;
+             padding: 0 !important; /* Remove inner padding */
+             margin: 0 !important; /* Remove inner margin */
+             /* display: block !important; /* Might be needed depending on inner tags */
         }
 
-         #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content, /* Assumed inner content class */
-         #my-chat-container .n8n-chat-message--bot > div, /* Direct div child */
-         #my-chat-container .n8n-chat-message--bot > span /* Direct span child */
+         #my-chat-container .chat-message-from-bot .chat-message-markdown,
+         #my-chat-container .chat-message-from-bot .chat-message-markdown > *
         {
             text-align: left !important; /* **Force text alignment to the left, HIGH PRIORITY** */
             max-width: 100% !important;
@@ -238,37 +266,37 @@
             overflow-wrap: break-word !important;
              padding: 0 !important;
              margin: 0 !important;
-             display: block !important;
+             /* display: block !important; */
         }
 
 
         /* Style the input area - this contains the text input and the send button */
-        /* Verify '.n8n-chat-input-area' class name with F12 */
-        #my-chat-container .n8n-chat-input-area {
+        /* Based on your F12 output: div.n8n-chat-input-area.chat-input-area */
+        #my-chat-container .chat-input-area { /* Use the class observed */
             display: flex !important; /* Use flexbox */
             align-items: center !important; /* Vertically align */
             gap: 10px !important; /* Space between input and button */
             padding: 10px 20px !important; /* Padding */
             flex-shrink: 0 !important; /* Prevent shrinking */
             margin-top: auto !important; /* Push input area to the bottom */
-             width: 100% !important; /* Ensure it takes full width */
-             box-sizing: border-box !important; /* Include padding in width */
+            width: 100% !important; /* Ensure it takes full width */
+            box-sizing: border-box !important; /* Include padding in width */
         }
 
          /* Style the input field itself within the input area */
-        /* Verify '.n8n-chat-input' class name with F12 */
-        #my-chat-container .n8n-chat-input {
+        /* Based on your F12 output: textarea.n8n-chat-input.chat-input */
+        #my-chat-container .chat-input { /* Use the class observed */
             flex-grow: 1 !important; /* Input field takes up available space */
-             min-width: 0 !important; /* Allow input field to shrink if necessary */
+            min-width: 0 !important; /* Allow input field to shrink */
              /* Add any specific input styles here */
         }
 
         /* Style the send button within the input area */
-        /* Verify '.n8n-chat-send-button' class name with F12 */
-        /* #my-chat-container .n8n-chat-send-button {
+        /* Based on your F12 output: button.n8n-chat-send-button.chat-send-button */
+        #my-chat-container .chat-send-button { /* Use the class observed */
             flex-shrink: 0 !important; /* Prevent button from shrinking */
             /* ... other button styles ... */
-        /* } */
+        }
 
 
     </style>
@@ -277,15 +305,27 @@
 
     <!-- External container for centering and sizing -->
     <div id="chat-wrapper">
-        <!-- Custom Header - Modified text based on image -->
+        <!-- Custom Header -->
         <div class="custom-header">
             Hi, How can I help you today?
         </div>
 
         <!-- This is the container where the chat interface will be embedded -->
-        <!-- In fullscreen mode, this container fills the remaining space of the flex parent -->
+        <!-- It's a Flex container for the main chat layout and input area -->
         <div id="my-chat-container">
             <!-- n8n chat content will be automatically added here by the script -->
+            <!-- The script will add structure like:
+                 <main class="chat-layout chat-wrapper n8n-chat">
+                     <div class="chat-header">...</div> <!-- Hidden by CSS variables -->
+                     <div class="chat-body">
+                         <div class="chat-messages-list">
+                             <!-- Message bubbles go here -->
+                         </div>
+                         <!-- Potentially other elements like typing indicator -->
+                     </div>
+                     <div class="n8n-chat-input-area chat-input-area">...</div>
+                 </main>
+            -->
         </div>
     </div>
 
@@ -296,25 +336,27 @@
 	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
 	    createChat({
-		    webhookUrl: 'https://c9fb-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // Replace with your actual URL
+		    // *** REPLACE THIS WITH YOUR ACTUAL WEBHOOK URL ***
+		    webhookUrl: 'https://c9fb-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat',
 		    target: '#my-chat-container', // Point to this container's ID
        		mode: 'fullscreen', // Use fullscreen mode to make it fill the parent container #my-chat-container's remaining space
-            // Adjust options based on the target image and requirements
+
+            // Options to match the desired look and behavior
             initialMessages: [], // Clear initial messages as we use a custom header
             showWelcomeScreen: false, // Do not show the welcome screen button
-            defaultLanguage: 'en', // Still need to set to 'en' for the config keys
-            i18n: { // Override some text
+
+            // i18n config for text customization
+            defaultLanguage: 'en', // Still need to set to 'en' for the i18n key below
+            i18n: {
                  en: { // Keep 'en' as the key based on documentation
                      title: '', // Clear default title
                      subtitle: '', // Clear default subtitle
                      footer: '', /* Remove footer */
                      getStarted: '', /* Remove welcome screen "Get Started" text */
-                     // Set input box placeholder to Chinese based on the image
+                     // Set input box placeholder to Chinese
                      inputPlaceholder: '和AI聊聊。。。',
                  }
             },
-             // Optional: Add any initial chat messages here if desired, but the image doesn't show them initially
-            // initialMessages: ['你好！有什么可以帮您的吗?'], // Example initial bot message
 	    });
     </script>
 
