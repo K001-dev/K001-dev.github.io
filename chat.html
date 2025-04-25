@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 聊天</title> {# 这个页面的标题 #}
+    <title>AI 聊天</title> {/* 这个页面的标题 */}
 
     <!-- 引入 n8n chat 的 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
-    <!-- 如果需要 Tailwind 的基础样式，可以在这里引入 -->
-    {# <script src="https://cdn.tailwindcss.com"></script> #}
-
     <!-- 引入 Google Fonts 或其他字体，以保持风格一致 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 
     <style>
         /* 确保 html, body 和聊天容器填满整个视口，实现全屏效果 */
@@ -24,7 +20,7 @@
             padding: 0;
             overflow: hidden; /* 隐藏滚动条，让聊天组件自己处理滚动 */
             font-family: 'Inter', sans-serif; /* 使用相同的字体 */
-            background-color: #f8fafc; /* 设置背景色，与目标图片接近 */
+            background-color: #f5f5f5; /* 设置一个更接近第三张图片中的浅灰色背景 */
             color: #1e293b; /* 设置默认文本颜色 */
         }
 
@@ -38,59 +34,73 @@
         /* 覆盖 n8n chat 内部元素的 CSS 变量来改变外观 */
         /* 参考 n8n 文档和你的目标图片来调整这些值 */
        #my-chat-container { /* 将变量定义在容器下，确保只影响聊天组件 */
-            /* 头部样式 */
-            --chat--header-height: 60px; /* 可以给头部一个固定高度 */
-            --chat--header--padding: 0 1rem; /* 调整内边距 */
-            --chat--header--background: #ffffff; /* 头部背景色 (白色) */
+            /* 头部样式 - 调整以匹配第三张图片中简约的头部 */
+            --chat--header-height: 70px; /* 头部高度 */
+            --chat--header--padding: 0 1.5rem; /* 调整内边距 */
+            --chat--header--background: #f5f5f5; /* 头部背景色 (与 body 背景一致) */
             --chat--header--color: #1e293b; /* 头部文字颜色 (深色) */
-            --chat--header--border-bottom: 1px solid #e2e8f0; /* 添加浅灰色底部边框 */
-            --chat--heading--font-size: 1.5em; /* 调整标题字号 */
-            --chat--subtitle--font-size: 1em; /* 调整副标题字号 */
-            --chat--header--display: flex; /* 让头部内容flex布局 */
-            --chat--header--align-items: center; /* 垂直居中 */
-            --chat--header--justify-content: center; /* 水平居中，如果只有标题 */
+            --chat--header--border-bottom: none; /* 移除头部底部边框，让它更干净 */
+            --chat--heading--font-size: 2.2em; /* 调整标题字号 */
+            --chat--subtitle--font-size: 1.1em; /* 调整副标题字号 */
+            --chat--header--display: flex; /* 启用 flex 布局 */
+            --chat--header--flex-direction: column; /* 垂直排列标题和副标题 */
+            --chat--header--align-items: center; /* 水平居中内容 */
+            --chat--header--justify-content: center; /* 垂直居中内容 */
 
-            /* 消息气泡样式 */
+
+            /* 消息气泡样式 - 调整以匹配第三张图片中的简约气泡 */
             --chat--message--bot--background: #ffffff; /* 机器人消息背景色 (白色，像目标图) */
             --chat--message--bot--color: #1e293b; /* 机器人消息文字颜色 */
             --chat--message--user--background: #e2e8f0; /* 用户消息背景色 (浅灰，像目标图) */
             --chat--message--user--color: #1e293b; /* 用户消息文字颜色 */
-            --chat--border-radius: 0.5rem; /* 消息气泡圆角 */
+            --chat--border-radius: 0.75rem; /* 增加消息气泡圆角 */
             --chat--message--padding: 0.75rem 1rem; /* 消息内边距 */
             --chat--message-line-height: 1.6; /* 行高 */
-            --chat--spacing: 1rem; /* 基本间距，影响消息之间的距离等 */
+             --chat--spacing: 1rem; /* 基本间距，影响消息之间的距离、输入区域与消息区域的距离等 */
 
 
-            /* 输入框样式 */
+            /* 输入框样式 - 调整以匹配第三张图片中的圆形输入框和内嵌按钮 */
+            /* 注意：仅仅通过 CSS 变量【无法】在输入框内部添加“Web Search”和上传按钮。 */
+            /* 这是 n8n chat 组件本身的结构和功能决定的。 */
+            /* 我们只能尽量让输入框的 *样式* 接近图片。 */
             --chat--textarea--height: 50px; /* 输入框高度 */
-             /* 输入区域整体样式 */
-            --chat--input-area-background: #ffffff; /* 输入区域背景色 */
-            --chat--input-area-padding: 1rem; /* 输入区域内边距 */
-            --chat--input-area-border-top: 1px solid #e2e8f0; /* 输入区域上边框 */
+
+            /* 输入区域整体样式 (包含输入框和发送按钮的区域) */
+            --chat--input-area-background: #f5f5f5; /* 输入区域背景色 (与 body 背景一致) */
+            --chat--input-area-padding: 1.5rem 1rem; /* 增加输入区域上下内边距 */
+            --chat--input-area-border-top: none; /* 移除输入区域上边框，更简约 */
 
 
-            /* 输入框内部样式 */
-            --chat--input-background: #ffffff; /* 输入框背景色 */
+            /* 输入框本身的样式 (通常 n8n chat 的输入框会是一个 textarea 或 input) */
+            --chat--input-background: #ffffff; /* 输入框背景色 (白色) */
             --chat--input-color: #1e293b; /* 输入框文字颜色 */
-            --chat--input-padding: 0.5rem 1rem; /* 输入框内边距 */
-            --chat--input-border-radius: 0.5rem; /* 输入框圆角 */
-            --chat--input-border: 1px solid #d1d5db; /* 输入框边框 */
-            --chat--input-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* 输入框阴影 */
+            --chat--input-padding: 0.75rem 1.5rem; /* 增加输入框内边距 */
+            --chat--input-border-radius: 2rem; /* 增大圆角，使其接近圆形 */
+            --chat--input-border: none; /* 移除边框 */
+            --chat--input-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* 添加更明显的阴影 */
+
+             /* 发送按钮样式 (如果存在，通常在输入框旁边) */
+             --chat--toggle--background: #3b82f6; /* 可以用蓝色作为发送按钮颜色 */
+             --chat--toggle--color: #ffffff; /* 按钮文字颜色 */
+             --chat--toggle--size: 40px; /* 按钮大小 */
+             --chat--toggle--border-radius: 50%; /* 圆形按钮 */
 
 
-            /* 按钮颜色 (发送按钮等) */
-             --chat--color-primary: #3b82f6; /* 例如，蓝色作为主题色 */
-             --chat--color-primary-shade-50: #2563eb;
-            --chat--color-white: #ffffff; /* 白色通常用于按钮文字 */
+            /* 其他颜色和变量，根据需要调整 */
+            --chat--color-primary: #3b82f6; /* 例如，蓝色作为主题色 */
+            --chat--color-secondary: #6b46c1; /* 另一个主题色 */
+            --chat--color-white: #ffffff; /* 白色 */
+             --chat--color-light: #e2e8f0; /* 浅色，用于消息背景等 */
+            --chat--color-medium: #94a3b8; /* 中间色，可能用于边框或分隔线 */
+            --chat--color-dark: #1e293b; /* 深色，用于文本 */
 
-
-            /* 更多变量... 根据文档和需要调整 */
 
             /* 可能需要一些自定义 CSS 来调整布局，如果只覆盖变量不够 */
-             /* 例如，调整消息列表的滚动行为 */
-            /* .n8n-chat-messages-container { overflow-y: auto; padding: var(--chat--spacing); } */ /* 这个类名需要根据实际生成的 DOM 检查 */
-            /* 可能需要调整 header 内部元素的 flex 或 grid 布局，取决于 n8n chat 组件的实现 */
-
+            /* 例如，调整消息列表的滚动行为和内边距 */
+            /* 检查实际 DOM，找到消息列表容器的类名 */
+             /* .n8n-chat-messages-container { overflow-y: auto; padding: 0 var(--chat--spacing); } */
+             /* .n8n-chat-container { display: flex; flex-direction: column; } /* 确保主容器是 flex 布局，方便头部、内容、输入框布局 */
+             /* .n8n-chat-messages-container { flex-grow: 1; overflow-y: auto; } /* 让消息列表占据剩余空间并滚动 */
 
        }
     </style>
@@ -98,6 +108,7 @@
 <body>
 
     <!-- 这是聊天界面将被嵌入的容器 -->
+    <!-- 由于是全屏模式，这个容器填满整个 body 即可 -->
     <div id="my-chat-container">
         <!-- n8n chat 的内容会被脚本自动添加到这里面 -->
     </div>
@@ -111,20 +122,17 @@
 		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // 替换为你的实际 URL
 		    target: '#my-chat-container', // 指向这个容器的 ID
        		mode: 'fullscreen', // 使用全屏模式
-            // 可以根据需要添加其他选项，比如 initialMessages, showWelcomeScreen 等
-            initialMessages: [
-                "您好！有什么可以帮助您的吗？ 👋", // 可以自定义欢迎消息
-                "我是您的AI助手，请告诉我您的问题。"
-            ],
-            showWelcomeScreen: true, // 可以选择显示欢迎屏幕
-            defaultLanguage: 'en', // 目前只支持英文，虽然消息可以写中文
-            i18n: { // 可以尝试覆盖英文翻译，但效果可能有限
+            // 根据目标图片调整以下选项
+            initialMessages: [], // 目标图片没有初始消息，留空
+            showWelcomeScreen: false, // 不显示欢迎屏幕按钮
+            defaultLanguage: 'en', // 仍需设置为英文，但 i18n 可以覆盖部分文本
+            i18n: { // 尝试覆盖英文界面的部分文本
                  en: {
-                     title: 'AI 聊天',
-                     subtitle: '有什么问题可以问我',
-                     footer: '', /* 可以放一些页脚信息 */
-                     getStarted: '开始新的对话',
-                     inputPlaceholder: '请输入您的问题...',
+                     title: 'Hi, doumn jack', // 对应目标图片中的大标题
+                     subtitle: 'How can I help you today?', // 对应目标图片中的小标题/输入框提示
+                     footer: '', /* 移除页脚 */
+                     getStarted: '', /* 移除欢迎屏幕的“开始”按钮文本 */
+                     inputPlaceholder: 'How can I help you today?', // 设置输入框的占位符文本
                  }
             }
 	    });
