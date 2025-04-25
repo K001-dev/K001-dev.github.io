@@ -30,8 +30,8 @@
 
         /* 外部容器，用于限制聊天窗口的尺寸并添加阴影 */
         #chat-wrapper {
-            width: 95%; /* 允许一些弹性，不要固定太死 */
-            max-width: 800px; /* 设置一个最大宽度，可根据需要调整 */
+            width: 95%; /* 允许一些弹性 */
+            max-width: 800px; /* 设置一个最大宽度 */
             height: 90%; /* 设置一个高度 */
             max-height: 700px; /* 也可以设置最大高度 */
             background-color: #ffffff; /* 设置主聊天区域的白色背景 */
@@ -41,190 +41,216 @@
             display: flex; /* 使其成为 flex 容器 */
             flex-direction: column; /* 子元素垂直排列 */
             box-sizing: border-box; /* 确保 padding 不会增加总尺寸 */
-            padding: 20px; /* 给外层 wrapper 添加一些内边距 */
-            position: relative; /* 添加相对定位，有时对内部定位有帮助 */
+            /* padding: 20px; /* Removing wrapper padding, will add padding to message area and input area instead */
+            position: relative; /* Add relative positioning */
         }
 
         /* 自定义标题样式 - 匹配图一的样式 */
         .custom-header {
             text-align: center; /* 文本居中 */
-            font-size: 2em; /* 较大的字号 */
+            font-size: 1.5em; /* Adjusted slightly smaller than 2em to better match image */
             font-weight: 600; /* 加粗 */
             color: #333; /* 文字颜色 */
             margin-bottom: 20px; /* 标题下方留白 */
-            padding: 0 10px; /* 左右稍微有点内边距 */
+            padding: 20px 20px 0 20px; /* Add padding to match the wrapper idea */
             flex-shrink: 0; /* 确保标题不会被压缩 */
+            box-sizing: border-box;
         }
 
-        /* 这是聊天界面将被嵌入的容器 */
-        /* n8n chat 的 fullscreen 模式会填满它的 target 容器 */
+        /* This is the container where the chat interface will be embedded */
+        /* In fullscreen mode, this container will fill the remaining space of its parent */
         #my-chat-container {
             width: 100%;
-            flex-grow: 1; /* 让它占据 flex 容器的剩余空间 */
-            position: relative; /* 可能需要相对定位 */
-             /* background-color: #f9f9f9; /* 可以给消息区域设置一个微浅的背景色 */
+            flex-grow: 1; /* Let it take up the remaining space in the flex container */
+            position: relative; /* Needed for fullscreen mode potentially */
+            /* background-color: #f9f9f9; /* Can give the message area a slightly lighter background */
+             display: flex; /* Make the container itself a flex container */
+             flex-direction: column; /* Arrange internal elements (like messages and input) vertically */
         }
 
-        /* 覆盖 n8n chat 内部元素的 CSS 变量来改变外观 */
-        /* 将变量定义在 #my-chat-container 下 */
+        /* Override n8n chat internal CSS variables to change appearance */
+        /* Apply variables within #my-chat-container */
        #my-chat-container {
-            /* 头部样式 - 我们使用自定义头部，所以隐藏组件自带的头部 */
+            /* Header style - We use a custom header, so hide the component's header */
             --chat--header-height: 0px;
             --chat--header--padding: 0;
             --chat--header--border-bottom: none;
 
-            /* 消息气泡样式 */
-            --chat--message--bot--background: #ffffff; /* 机器人消息背景色 (白色) */
-            --chat--message--bot--color: #333; /* 机器人消息文字颜色 */
-            --chat--message--user--background: #e9ecef; /* 用户消息背景色 (浅灰) */
-            --chat--message--user--color: #333; /* 用户消息文字颜色 */
-            --chat--border-radius: 12px; /* 增加消息气泡圆角 */
-            --chat--message--padding: 0.8rem 1.2rem; /* 消息内边距 */
-            --chat--message-line-height: 1.6; /* 行高 */
-            --chat--spacing: 1rem; /* 基本间距 */
+            /* Message bubble styles */
+            --chat--message--bot--background: #ffffff; /* Bot message background (white) */
+            --chat--message--bot--color: #333; /* Bot message text color */
+            --chat--message--bot--border: 1px solid #e9ecef; /* Optional: subtle border */
+            --chat--message--user--background: #007bff; /* User message background (blue) */
+            --chat--message--user--color: #ffffff; /* User message text color (white for contrast) */
+            --chat--message--user--border: none; /* No border for user message */
+            --chat--border-radius: 18px; /* Increased message bubble border-radius for a softer look */
+            --chat--message--padding: 0.8rem 1.2rem; /* Message internal padding */
+            --chat--message-line-height: 1.6; /* Line height */
+            --chat--spacing: 1rem; /* Base spacing */
 
 
-            /* 输入框样式 */
-            /* 输入区域整体样式 (包含输入框和发送按钮的区域) */
-            --chat--input-area-background: #ffffff; /* 输入区域背景色 (白色) */
-            --chat--input-area-padding: 1rem 1.5rem; /* 增加输入区域上下内边距 */
-            --chat--input-area-border-top: none; /* 移除输入区域上边框 */
-            --chat--input-area-box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03); /* 添加更柔和的阴影 */
+            /* Input box style */
+            /* Overall input area style (includes input field and send button) */
+            --chat--input-area-background: #ffffff; /* Input area background (white) */
+            --chat--input-area-padding: 1rem 1.5rem; /* Add padding to input area */
+            --chat--input-area-border-top: 1px solid #e9ecef; /* Subtle border above input area */
+            --chat--input-area-box-shadow: none; /* Remove shadow if any */
 
 
-            /* 输入框本身的样式 */
-            --chat--input-background: transparent; /* 输入框背景透明 */
-            --chat--input-color: #333; /* 输入框文字颜色 */
-            --chat--input-padding: 0; /* 输入框本身的内边距设为0 */
-            --chat--input-border-radius: 0; /* 输入框本身不需要圆角 */
-            --chat--input-border: none; /* 移除边框 */
-            --chat--input-box-shadow: none; /* 移除阴影 */
-            --chat--textarea--height: 50px; /* 输入框高度 */
+            /* Input field itself */
+            --chat--input-background: transparent; /* Input field background transparent */
+            --chat--input-color: #333; /* Input field text color */
+            --chat--input-padding: 0.5rem 0; /* Add some vertical padding inside input */
+            --chat--input-border-radius: 0; /* Input field itself doesn't need border-radius */
+            --chat--input-border: none; /* Remove border */
+            --chat--input-box-shadow: none; /* Remove shadow */
+            --chat--textarea--height: 50px; /* Input box height */
 
-             /* 发送按钮样式 (需要检查实际类名来定位) */
-             /* 您可能需要根据实际 DOM 结构来调整 */
+             /* Send button style (you might need to inspect to target correctly) */
+             /* Using the provided image, the send button is a simple icon */
+             /* The default style might be sufficient, but you could target it like: */
              /* #my-chat-container .n8n-chat-input-area button { ... } */
 
 
-            /* 其他颜色和变量 */
-            --chat--color-primary: #007bff; /* 蓝色 */
-            --chat--color-secondary: #6c757d; /* 灰色 */
-            --chat--color-white: #ffffff; /* 白色 */
-            --chat--color-light: #e9ecef; /* 浅色 */
-            --chat--color-medium: #adb5bd; /* 中间色 */
-            --chat--color-dark: #333; /* 深色 */
-            --chat--color-typing: #555; /* 输入中提示颜色 */
+            /* Other colors and variables - Keep relevant ones */
+            --chat--color-primary: #007bff; /* Blue */
+            --chat--color-secondary: #6c757d; /* Gray */
+            --chat--color-white: #ffffff; /* White */
+            --chat--color-light: #e9ecef; /* Light gray */
+            --chat--color-medium: #adb5bd; /* Medium gray */
+            --chat--color-dark: #333; /* Dark gray */
+            --chat--color-typing: #555; /* Typing indicator color */
 
        }
 
-        /* === 自定义 CSS 规则来修正对齐和内边距 === */
-        /* !!非常重要!! 需要检查 n8n chat 实际生成的 DOM 结构来确定准确的类名 */
-        /* 打开浏览器开发者工具 (F12), 选中您的用户消息 ("你好")，查看其父级和自身的类名 */
-        /* 下面的类名 `.n8n-chat-messages`, `.n8n-chat-message`, `.n8n-chat-message--user`, `.n8n-chat-message--bot` 是常见的命名，但可能需要根据您的实际情况修改 */
+        /* === Custom CSS rules to fix alignment and padding === */
+        /* !! IMPORTANT !! You MUST inspect the actual DOM generated by n8n chat */
+        /* Use browser developer tools (F12) to find the class names for: */
+        /* 1. The container holding all messages (e.g., .n8n-chat-messages) */
+        /* 2. An individual message element (e.g., .n8n-chat-message) */
+        /* 3. A user message element (e.g., .n8n-chat-message--user) */
+        /* 4. A bot message element (e.g., .n8n-chat-message--bot) */
+        /* The class names below are ASSUMPTIONS. Adjust if necessary. */
 
-        /* 调整消息列表容器的内边距，确保消息不会贴边 */
-        /* 假设消息列表容器的类名是 .n8n-chat-messages */
-        #my-chat-container .n8n-chat-messages {
-             padding: 10px; /* 添加内边距，避免消息贴左或贴右，也给顶部和底部留白 */
-             overflow-y: auto; /* 确保消息列表可滚动 */
-             flex-grow: 1; /* 在 flex 布局中占据剩余空间 */
-             display: flex; /* 使消息容器成为 flex 容器 */
-             flex-direction: column; /* 消息垂直排列 */
-             padding-bottom: 20px; /* 给消息列表底部留出更多空间，避免被输入框遮挡 */
-             /* 可选：调整消息列表的左右内边距，使其与输入框左右内边距一致 */
-             /* padding-left: 1.5rem; */
-             /* padding-right: 1.5rem; */
+        /* Style the message list container */
+        /* This container should handle scrolling and overall message padding */
+        #my-chat-container .n8n-chat-messages { /* ASSUMED class name */
+             padding: 15px 20px; /* Add left/right padding, and some top/bottom */
+             overflow-y: auto; /* Ensure message list is scrollable */
+             flex-grow: 1; /* Let it occupy the remaining space */
+             display: flex; /* Make it a flex container */
+             flex-direction: column; /* Stack messages vertically */
+             /* Remove any default padding if it conflicts: padding: 0 !important; */
         }
 
-        /* 修正用户消息靠右对齐 */
-        /* 假设单个消息容器的类名是 .n8n-chat-message */
-        /* 用户消息的特定类名是 .n8n-chat-message--user */
-        #my-chat-container .n8n-chat-message--user {
-             margin-left: auto !important; /* 自动左外边距，将元素推到最右边 */
-             margin-right: 0 !important; /* 确保右外边距为0 */
-             align-self: flex-end !important; /* 在 flex 容器内靠右对齐自身 */
-             /* 可能需要调整气泡内部内容的对齐，取决于组件内部结构 */
-             /* 假设气泡内的内容容器类名为 .n8n-chat-message-content */
-             /* #my-chat-container .n8n-chat-message--user .n8n-chat-message-content {
-                 text-align: right !important;
-             } */
-        }
-
-        /* 修正机器人消息靠左对齐 (确保默认行为正确) */
-        #my-chat-container .n8n-chat-message--bot {
-             margin-right: auto !important; /* 自动右外边距 */
-             margin-left: 0 !important; /* 确保左外边距为0 */
-             align-self: flex-start !important; /* 在 flex 容器内靠左对齐自身 */
-             /* 假设气泡内的内容容器类名为 .n8n-chat-message-content */
-             /* #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content {
-                 text-align: left !important; /* 确保文本靠左 */
-             } */
-        }
-
-
-        /* 可选：调整单个消息气泡的最大宽度 */
-         #my-chat-container .n8n-chat-message {
-             max-width: 85%; /* 限制消息气泡宽度 */
-             margin-bottom: 10px; /* 消息之间留白 */
+         /* Style individual message elements */
+         #my-chat-container .n8n-chat-message { /* ASSUMED class name */
+             max-width: 80%; /* Limit bubble width */
+             margin-bottom: 12px; /* Space between messages */
+             /* Ensure messages are display: flex to potentially align content inside */
+             display: flex;
+             /* align-items: flex-start; /* Or center, depending on desired internal alignment */
          }
 
-          /* 调整输入区域的布局，可能需要检查实际DOM */
-          /* 假设输入区域类名为 .n8n-chat-input-area */
-          /* #my-chat-container .n8n-chat-input-area {
-               display: flex;
-               align-items: center;
-               gap: 10px; /* 输入框和发送按钮之间的间距 */
-               /* margin-left/right: auto; /* 尝试居中整个输入区域 */
-           }
-           /* #my-chat-container .n8n-chat-input-area .n8n-chat-input { /* 假设输入框类名 */
-               flex-grow: 1; /* 输入框占据剩余空间 */
-           }
-           /* #my-chat-container .n8n-chat-input-area .n8n-chat-send-button { /* 假设发送按钮类名 */
-                /* 设置按钮样式 */
-           } */
+        /* Align USER messages to the RIGHT */
+        #my-chat-container .n8n-chat-message--user { /* ASSUMED class name */
+             margin-left: auto !important; /* Auto left margin pushes it right */
+             margin-right: 0 !important; /* Ensure no right margin */
+             align-self: flex-end !important; /* Align the item itself to the end of the flex container */
+             /* Adjust bubble shape specific to user message */
+             border-top-right-radius: var(--chat--border-radius, 18px); /* Top-right corner is sharp or less rounded */
+             border-top-left-radius: var(--chat--border-radius, 18px); /* Soft top-left */
+             border-bottom-left-radius: var(--chat--border-radius, 18px); /* Soft bottom-left */
+             border-bottom-right-radius: 4px; /* Sharp or less rounded bottom-right */
+        }
+
+        /* Align BOT messages to the LEFT (default behavior) */
+        #my-chat-container .n8n-chat-message--bot { /* ASSUMED class name */
+             margin-right: auto !important; /* Auto right margin */
+             margin-left: 0 !important; /* Ensure no left margin */
+             align-self: flex-start !important; /* Align the item itself to the start of the flex container */
+             /* Adjust bubble shape specific to bot message */
+             border-top-left-radius: var(--chat--border-radius, 18px); /* Top-left corner is sharp or less rounded */
+             border-top-right-radius: var(--chat--border-radius, 18px); /* Soft top-right */
+             border-bottom-left-radius: 4px; /* Sharp or less rounded bottom-left */
+             border-bottom-right-radius: var(--chat--border-radius, 18px); /* Soft bottom-right */
+        }
+
+        /* Optional: Adjust text alignment inside the bubbles if needed */
+        /* Assuming the content inside the bubble has a class like .n8n-chat-message-content */
+         #my-chat-container .n8n-chat-message--user .n8n-chat-message-content { /* ASSUMED class name */
+             text-align: right; /* Align text right within user bubble */
+         }
+         #my-chat-container .n8n-chat-message--bot .n8n-chat-message-content { /* ASSUMED class name */
+             text-align: left; /* Align text left within bot bubble */
+         }
+
+
+        /* Style the input area - this contains the text input and the send button */
+        #my-chat-container .n8n-chat-input-area { /* ASSUMED class name */
+            display: flex; /* Use flexbox to lay out input and button */
+            align-items: center; /* Vertically align input and button */
+            gap: 10px; /* Space between input and button */
+            padding: 10px 20px; /* Add padding to match message area sides */
+            flex-shrink: 0; /* Prevent input area from shrinking */
+        }
+
+         /* Style the input field itself within the input area */
+        #my-chat-container .n8n-chat-input { /* ASSUMED class name */
+            flex-grow: 1; /* Input field takes up available space */
+            /* Add any specific input styles here */
+        }
+
+        /* Style the send button within the input area */
+        /* #my-chat-container .n8n-chat-send-button { /* ASSUMED class name */
+            /* Customize button appearance here if needed */
+        /* } */
+
 
     </style>
 </head>
 <body>
 
-    <!-- 外部容器，用于居中和设置尺寸 -->
+    <!-- External container for centering and sizing -->
     <div id="chat-wrapper">
-        <!-- 自定义标题 - 根据要求修改文本 -->
+        <!-- Custom Header - Modified text based on image -->
         <div class="custom-header">
             Hi, How can I help you today?
         </div>
 
-        <!-- 这是聊天界面将被嵌入的容器 -->
-        <!-- 由于是全屏模式，这个容器填满 flex 容器的剩余空间 -->
+        <!-- This is the container where the chat interface will be embedded -->
+        <!-- In fullscreen mode, this container fills the remaining space of the flex parent -->
         <div id="my-chat-container">
-            <!-- n8n chat 的内容会被脚本自动添加到这里面 -->
+            <!-- n8n chat content will be automatically added here by the script -->
         </div>
     </div>
 
 
-    <!-- 引入 n8n chat 的 JavaScript 脚本 -->
-    <!-- 放在 body 结束标签之前，确保容器 div 已经存在 -->
+    <!-- Include n8n chat JavaScript script -->
+    <!-- Place before the closing body tag to ensure the container div exists -->
     <script type="module">
 	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
 	    createChat({
-		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // 替换为你的实际 URL
-		    target: '#my-chat-container', // 指向这个容器的 ID
-       		mode: 'fullscreen', // 使用全屏模式，使其填满父容器 #my-chat-container 的剩余空间
-            // 根据目标图片调整以下选项
-            initialMessages: [], // 清空初始消息，标题通过自定义 HTML 显示
-            showWelcomeScreen: false, // 不显示欢迎屏幕按钮
-            defaultLanguage: 'en', // 仍需设置为英文
-            i18n: { // 覆盖部分文本
-                 en: {
-                     title: '', // 清空默认标题
-                     subtitle: '', // 清空默认副标题
-                     footer: '', /* 移除页脚 */
-                     getStarted: '', /* 移除欢迎屏幕的“开始”按钮文本 */
-                     // 根据最新的图片，输入框占位符是中文
+		    webhookUrl: 'https://ca40-140-82-8-246.ngrok-free.app/webhook/46391514-35d5-4213-a31a-c7d1a9f773e4/chat', // Replace with your actual URL
+		    target: '#my-chat-container', // Point to this container's ID
+       		mode: 'fullscreen', // Use fullscreen mode to make it fill the parent container #my-chat-container's remaining space
+            // Adjust options based on the target image and requirements
+            initialMessages: [], // Clear initial messages as we use a custom header
+            showWelcomeScreen: false, // Do not show the welcome screen button
+            defaultLanguage: 'en', // Still need to set to 'en' for the config keys
+            i18n: { // Override some text
+                 en: { // Keep 'en' as the key based on documentation
+                     title: '', // Clear default title
+                     subtitle: '', // Clear default subtitle
+                     footer: '', /* Remove footer */
+                     getStarted: '', /* Remove welcome screen "Get Started" text */
+                     // Set input box placeholder to Chinese based on the image
                      inputPlaceholder: '和AI聊聊。。。',
                  }
-            }
+            },
+             // Optional: Add any initial chat messages here if desired, but the image doesn't show them initially
+            // initialMessages: ['和AI聊聊。。。'], // Example initial bot message
 	    });
     </script>
 
